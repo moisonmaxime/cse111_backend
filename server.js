@@ -12,6 +12,9 @@ index(app);
 let users = require('./endpoints/users_endpoint');
 users(app);
 
+let containers = require('./endpoints/containers_endpoint');
+containers(app);
+
 app.use(function(req, res) {
     res.status(404).send({url: req.originalUrl + ' not found'})
 });

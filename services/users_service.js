@@ -8,7 +8,7 @@ exports.get_all_users = function(req, res) {
 };
 
 exports.get_user = function(req, res) {
-    let username = req.params.username
+    let username = req.params.username;
     db.get("SELECT * FROM user where u_username = $username", { $username: username },function(err, result) {
         res.send(result);
     });
