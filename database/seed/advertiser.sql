@@ -1,0 +1,10 @@
+insert into advertiser (ad_id, ad_name) values (1, 'Procyon cancrivorus');
+insert into advertiser (ad_id, ad_name) values (2, 'Lycosa godeffroyi');
+insert into advertiser (ad_id, ad_name) values (3, 'Anas bahamensis');
+insert into advertiser (ad_id, ad_name) values (4, 'Cervus canadensis');
+insert into advertiser (ad_id, ad_name) values (5, 'Rhabdomys pumilio');
+insert into advertiser (ad_id, ad_name) values (6, 'Coluber constrictor');
+insert into advertiser (ad_id, ad_name) values (7, 'Neophoca cinerea');
+insert into advertiser (ad_id, ad_name) values (8, 'Ctenophorus ornatus');
+insert into advertiser (ad_id, ad_name) values (9, 'Ictonyx striatus');
+insert into advertiser (ad_id, ad_name) values (10, 'Ictonyx striatus');

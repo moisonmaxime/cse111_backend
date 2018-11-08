@@ -1,0 +1,10 @@
+insert into audience (a_id, a_name) values (1, 'Idaho Blue-eyed Grass');
+insert into audience (a_id, a_name) values (2, 'Pepper');
+insert into audience (a_id, a_name) values (3, 'Bristly Buttercup');
+insert into audience (a_id, a_name) values (4, 'Blueberry');
+insert into audience (a_id, a_name) values (5, 'Night And Afternoon');
+insert into audience (a_id, a_name) values (6, 'Texas Snoutbean');
+insert into audience (a_id, a_name) values (7, 'Trailing Black Currant');
+insert into audience (a_id, a_name) values (8, 'Cyrtandra');
+insert into audience (a_id, a_name) values (9, 'Lilac Sage');
+insert into audience (a_id, a_name) values (10, 'Black Crowberry');

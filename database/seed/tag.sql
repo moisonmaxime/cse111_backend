@@ -1,0 +1,10 @@
+insert into tag (t_id, t_name) values (1, 'Natural Language Processing');
+insert into tag (t_id, t_name) values (2, 'Test Automation');
+insert into tag (t_id, t_name) values (3, 'Supervisory Skills');
+insert into tag (t_id, t_name) values (4, 'Kaseya');
+insert into tag (t_id, t_name) values (5, 'AHLTA');
+insert into tag (t_id, t_name) values (6, 'BPD');
+insert into tag (t_id, t_name) values (7, 'OSHA 30-Hour');
+insert into tag (t_id, t_name) values (8, 'FPC 1');
+insert into tag (t_id, t_name) values (9, 'QRC');
+insert into tag (t_id, t_name) values (10, 'Agarose Gel Electrophoresis');

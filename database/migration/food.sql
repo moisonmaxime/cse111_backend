@@ -1,0 +1,10 @@
+CREATE TABLE food (
+    f_id           INT          PRIMARY KEY,
+    f_name         CHAR (25)    NOT NULL,
+    f_brand        CHAR (25)    NOT NULL,
+    f_expiredate   DATE         NOT NULL,
+    f_calories     INT          NOT NULL,
+    f_quantity     INT          NOT NULL,
+    f_container_id INT          NOT NULL,
+    FOREIGN KEY (f_container_id) REFERENCES container (c_id)
+);
