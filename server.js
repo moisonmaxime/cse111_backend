@@ -15,6 +15,9 @@ users(app);
 let containers = require('./endpoints/containers_endpoint');
 containers(app);
 
+let auth = require('./endpoints/authentication_endpoint');
+auth(app);
+
 app.use(function(req, res) {
     res.status(404).send({url: req.originalUrl + ' not found'})
 });
