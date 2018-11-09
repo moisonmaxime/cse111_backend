@@ -4,7 +4,7 @@ module.exports = function(app) {
     app.route('/containers/:username')
         .get(service.get_containers)
 
-    app.route('/containers/:username/:cname/:ctype')
+    app.route('/containers/:username/:cname')
         .post(service.create_containers)
 
     app.route('/containers/:username/:cname')
