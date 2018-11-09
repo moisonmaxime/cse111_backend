@@ -10,6 +10,7 @@
     "apikeygen": "^1.1.0",
     "bcrypt": "^3.0.2",
     "express": "^4.16.4",
+    "express-validator": "^5.3.0",
     "sqlite3": "^4.0.3"
   },
   "devDependencies": {

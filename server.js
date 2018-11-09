@@ -1,10 +1,13 @@
 let express = require('express'),
     app = express(),
     port = process.env.PORT || 3000,
-    bodyParser = require('body-parser');
+    expressValidator = require("express-validator");;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(expressValidator());
+
+let auth = require('./endpoints/authentication_endpoint');
+auth(app);
 
 let index = require('./endpoints/index_endpoint');
 index(app);
@@ -15,8 +18,6 @@ users(app);
 let containers = require('./endpoints/containers_endpoint');
 containers(app);
 
-let auth = require('./endpoints/authentication_endpoint');
-auth(app);
 
 app.use(function(req, res) {
     res.status(404).send({url: req.originalUrl + ' not found'})
