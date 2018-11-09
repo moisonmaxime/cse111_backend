@@ -15,6 +15,12 @@ users(app);
 let containers = require('./endpoints/containers_endpoint');
 containers(app);
 
+let foods = require('./endpoints/food_endpoint');
+foods(app);
+
+let drinks = require('./endpoints/drink_endpoint');
+drinks(app);
+
 let auth = require('./endpoints/authentication_endpoint');
 auth(app);
 
