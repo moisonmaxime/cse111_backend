@@ -37,7 +37,7 @@ exports.create_food = function(req, res) {
 
 exports.delete_food = function(req, res) {
     let username = req.params.username;
-    let dname = req.params.dname;
+    let fname = req.params.fname;
     let cname = req.params.cname;
     db.get(`DELETE
     FROM container, user_container, user, food
