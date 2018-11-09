@@ -1,5 +1,4 @@
-let sqlite3 = require('sqlite3').verbose();
-let db = new sqlite3.Database('fridge.db');
+let db = require('../db_manager');
 
 exports.get_containers = function(req, res) {
     let username = req.params.username;

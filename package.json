@@ -7,6 +7,8 @@
     "migrate": "./database/migrate.sh"
   },
   "dependencies": {
+    "apikeygen": "^1.1.0",
+    "bcrypt": "^3.0.2",
     "express": "^4.16.4",
     "sqlite3": "^4.0.3"
   },
