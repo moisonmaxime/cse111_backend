@@ -14,15 +14,6 @@ index(app);
 let users = require('./endpoints/users_endpoint');
 users(app);
 
-let containers = require('./endpoints/containers_endpoint');
-containers(app);
-
-let foods = require('./endpoints/food_endpoint');
-foods(app);
-
-let drinks = require('./endpoints/drink_endpoint');
-drinks(app);
-
 app.use(function(req, res) {
     res.status(404).send({url: req.originalUrl + ' not found'})
 });
