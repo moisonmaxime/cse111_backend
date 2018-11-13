@@ -1,6 +1,7 @@
 let db = require('../db_manager');
 
 exports.get_all_users = function(req, res) {
+    console.log(req.user.id);
     db.all("SELECT u_username as username FROM user", function(err, result) {
         res.send(result);
     });

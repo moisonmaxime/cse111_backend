@@ -14,6 +14,7 @@ async function login(req, res) {
 
         if (response) {
             let match = bcrypt.compareSync(password, response.hash);
+            console.log(response.key);
             if (match) return res.json({ token: response.key });
             return res.status(400).send("Invalid credentials");
         }
