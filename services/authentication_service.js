@@ -8,7 +8,7 @@ async function login(req, res) {
         let password = req.body.password;
 
         let response = await db.get(
-            'Select u_api_key as key, u_password as hash from user where u_username = $username',
+            'Select u_token as key, u_password as hash from user where u_username = $username',
             { $username: username}
         );
 
@@ -34,7 +34,7 @@ async function register(req, res) {
         let password = bcrypt.hashSync(req.body.password, 10);
         let name = req.body.name;
         let email = req.body.email;
-        let token = tokenGen.apikey(50);
+        let token = tokenGen.apikey(255);
 
         let userWithSameUsername = await db.get(
             'select u_username from user where u_username = $username',
@@ -44,7 +44,7 @@ async function register(req, res) {
         if (userWithSameUsername !== undefined) return res.status(409).send('User already exists');
 
         db.run(
-            'Insert into user(u_username, u_password, u_email, u_name, u_api_key) values($username, $password, $email, $name, $token)',
+            'Insert into user(u_username, u_password, u_email, u_name, u_token) values($username, $password, $email, $name, $token)',
             {
                 $username: username,
                 $password: password,
