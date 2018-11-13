@@ -1,5 +1,5 @@
 CREATE TABLE drink_tag (
-    dt_id INT PRIMARY KEY,
+    dt_id INTEGER PRIMARY KEY AUTOINCREMENT,
     dt_drink_id INT, 
     dt_tag_id INT,
     FOREIGN KEY(dt_drink_id) REFERENCES drink(d_id)
