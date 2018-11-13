@@ -1,36 +1,64 @@
 let db = require('../db_manager'),
     bcrypt = require('bcrypt'),
-    { validate } = require('express-validator/check');
+    tokenGen = require('apikeygen');
 
-exports.login = function(req, res) {
+async function login(req, res) {
+    try {
+        let username = req.body.username;
+        let password = req.body.password;
 
-    const errors = validate(req);
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
-    }
+        let response = await db.get(
+            'Select u_api_key as key, u_password as hash from user where u_username = $username',
+            { $username: username}
+        );
 
-    let username = req.query.username;
-    let password = req.query.password;
-
-    db.get("Select u_api_key as key, u_password as hash from user where u_username = $username",
-        { $username: username},
-        function (err, result) {
-            if (err) {
-                return res.sendStatus(500);
-            }
-
-            if (result) {
-                return bcrypt.compare(password, result.hash, function (error, match) {
-                    if (error) { return res.status(500).send(); }
-                    if (match) { return res.json({ api_key: result.key }); }
-                    else { return res.status(400).send("Invalid credentials"); }
-                });
-            }
-
+        if (response) {
+            let match = bcrypt.compareSync(password, response.hash);
+            if (match) return res.json({ token: response.key });
             return res.status(400).send("Invalid credentials");
-        });
+        }
+
+        return res.status(400).send("Invalid credentials");
+
+    } catch (e) {
+        console.log(e);
+        return res.sendStatus(500);
+    }
 };
 
-exports.register = function(req, res) {
+exports.login = login;
 
-};
+async function register(req, res) {
+    try {
+        let username = req.body.username;
+        let password = bcrypt.hashSync(req.body.password, 10);
+        let name = req.body.name;
+        let email = req.body.email;
+        let token = tokenGen.apikey(50);
+
+        let userWithSameUsername = await db.get(
+            'select u_username from user where u_username = $username',
+            { $username: username }
+        );
+
+        if (userWithSameUsername !== undefined) return res.status(409).send('User already exists');
+
+        db.run(
+            'Insert into user(u_username, u_password, u_email, u_name, u_api_key) values($username, $password, $email, $name, $token)',
+            {
+                $username: username,
+                $password: password,
+                $email: email,
+                $name: name,
+                $token: token
+            }
+        );
+
+        return res.status(200).send({ token: token });
+
+    } catch (e) {
+        console.log(e);
+        return res.sendStatus(500);
+    }
+}
+exports.register = register;

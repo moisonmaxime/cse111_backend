@@ -1,10 +1,9 @@
 let express = require('express'),
     app = express(),
     port = process.env.PORT || 3000,
-    expressValidator = require("express-validator");;
+    { validator } = require('./joi_validator');
 
 app.use(express.json());
-app.use(expressValidator());
 
 let auth = require('./endpoints/authentication_endpoint');
 auth(app);

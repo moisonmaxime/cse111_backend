@@ -1,14 +1,11 @@
-module.exports = function(app) {
-    let service = require('../services/authentication_service'),
-        { check } = require('express-validator/check');
+let service = require('../services/authentication_service'),
+    { loginSchema, registerSchema, validate } = require('../joi_validator');
 
+module.exports = function(app) {
 
     app.route('/auth/login')
-        .get([
-            check('username').isLength({ min: 3, max: 32 }).isAlphanumeric().escape(),
-            check('password').isLength({ min: 5, max: 32 }).isString().escape()
-        ], service.login);
+        .post(validate(loginSchema), service.login);
 
     app.route('/auth/register')
-        .post(service.register);
+        .post(validate(registerSchema), service.register);
 };
