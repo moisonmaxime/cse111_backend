@@ -1,5 +1,5 @@
 CREATE TABLE tag_audience (
-    ta_id INT PRIMARY KEY,
+    ta_id INTEGER PRIMARY KEY AUTOINCREMENT,
     ta_tag_id INT, 
     ta_audience_id INT,
     FOREIGN KEY(ta_audience_id) REFERENCES audience(a_id)

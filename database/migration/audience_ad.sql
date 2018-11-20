@@ -1,5 +1,5 @@
 CREATE TABLE audience_ad (
-    aa_id INTEGER PRIMARY KEY,
+    aa_id INTEGER PRIMARY KEY AUTOINCREMENT,
     aa_audience_id INT, 
     aa_ad_id INT,
     FOREIGN KEY(aa_audience_id) REFERENCES audience(a_id)

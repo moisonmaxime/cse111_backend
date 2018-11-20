@@ -1,5 +1,5 @@
 CREATE TABLE food_tag (
-    ft_id INT PRIMARY KEY,
+    ft_id INTEGER PRIMARY KEY AUTOINCREMENT,
     ft_food_id INT, 
     ft_tag_id INT,
     FOREIGN KEY(ft_food_id) REFERENCES food(f_id)

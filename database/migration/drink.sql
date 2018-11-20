@@ -1,5 +1,5 @@
 CREATE TABLE drink (
-    d_id           INT       PRIMARY KEY,
+    d_id INTEGER PRIMARY KEY AUTOINCREMENT,
     d_name         CHAR (25) NOT NULL,
     d_brand        CHAR (25) NOT NULL,
     d_expiredate   DATE      NOT NULL,

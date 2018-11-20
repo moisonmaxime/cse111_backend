@@ -1,5 +1,5 @@
 CREATE TABLE food (
-    f_id           INT          PRIMARY KEY,
+    f_id INTEGER PRIMARY KEY AUTOINCREMENT,
     f_name         CHAR (25)    NOT NULL,
     f_brand        CHAR (25)    NOT NULL,
     f_expiredate   DATE         NOT NULL,
