@@ -1,15 +1,13 @@
 let db = require('../db_manager');
 
-exports.get_all_users = function(req, res) {
-    console.log(req.user.id);
-    db.all("SELECT u_username as username FROM user", function(err, result) {
-        res.send(result);
-    });
+async function getCurrentUser(req, res) {
+    try {
+        console.log(req.user); // Find all info for that user
+        // let users = await db.all('select u_username as username from user');
+        // res.send(users);
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500);
+    }
 };
-
-exports.get_user = function(req, res) {
-    let username = req.params.username;
-    db.get("SELECT * FROM user where u_username = $username", { $username: username },function(err, result) {
-        res.send(result);
-    });
-};
+exports.getCurrentUser = getCurrentUser;
