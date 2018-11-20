@@ -24,6 +24,12 @@ async function all(query, dict) {
 exports.all = all;
 
 function run(query, dict) {
-    db.run(query, dict);
+    return new Promise((resolve, reject) => db.run(query, dict,
+        function (e, r)  {
+            if (e) {
+                return reject(e);
+            }
+            return resolve(r);
+        }));
 }
 exports.run = run;

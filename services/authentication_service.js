@@ -44,14 +44,14 @@ async function register(req, res) {
 
         if (userWithSameUsername !== undefined) return res.status(409).send('User already exists');
 
-        db.run(
-            'Insert into user(u_username, u_password, u_email, u_name, u_token) values($username, $password, $email, $name, $token)',
+        await db.run(
+            'Insert into user(u_username, u_password, u_email, u_name, u_token) values($username, $password, $email, $name, $token, $type)',
             {
                 $username: username,
                 $password: password,
                 $email: email,
                 $name: name,
-                $token: token
+                $token: token,
             }
         );
 
