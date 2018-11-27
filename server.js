@@ -1,7 +1,6 @@
 let express = require('express'),
     app = express(),
-    port = process.env.PORT || 3000,
-    { validator } = require('./joi_validator');
+    port = process.env.PORT || 3000;
 
 app.use(express.json());
 

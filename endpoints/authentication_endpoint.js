@@ -1,5 +1,5 @@
 let service = require('../services/authentication_service'),
-    { validate } = require('../joi_validator'),
+    { validate } = require('../middleware/joi_validator'),
     Joi = require('joi');
 
 const loginSchema = Joi.object({
