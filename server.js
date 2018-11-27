@@ -4,6 +4,14 @@ let express = require('express'),
 
 app.use(express.json());
 
+app.route('/favicon.ico')
+    .get((req, res) => {
+        res.send({});
+    });
+
+let log = require('./middleware/logger');
+app.use(log());
+
 let auth = require('./endpoints/authentication_endpoint');
 auth(app);
 
