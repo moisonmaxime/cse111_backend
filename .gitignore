@@ -1,3 +1,4 @@
 .idea/
 fridge.db
 node_modules/
+key.pem
