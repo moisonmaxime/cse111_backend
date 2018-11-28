@@ -42,7 +42,7 @@ async function updateFood(req, res) {
             'f_expiredate = $fexpiredate, \n    ' +
             'f_calories = $fcalories, \n    ' +
             'f_quantity = $fquantity, \n    ' +
-            'where d_name = $fname'
+            'where f_name = $fname'
             ,{$fname:req.body.fname, $fbrand: req.body.fbrand , $fexpiredate: req.body.fexpiredate ,
                 $fcalories:req.body.fcalories , $fquantity: req.body.fquanitity});
         res.send(food);
