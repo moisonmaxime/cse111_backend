@@ -36,21 +36,22 @@ async function register(req, res) {
         let email = req.body.email;
         let token = tokenGen.apikey(255);
 
-        let userWithSameUsername = await db.get(
+        let userWithSameUsername = await db.all(
             'select u_username from user where u_username = $username',
             { $username: username }
         );
 
-        if (userWithSameUsername !== undefined) return res.status(409).send('User already exists');
+        if (userWithSameUsername.length > 0) return res.status(409).send('User already exists');
 
         await db.run(
-            'Insert into user(u_username, u_password, u_email, u_name, u_token) values($username, $password, $email, $name, $token, $type)',
+            'Insert into user(u_username, u_password, u_email, u_name, u_token, u_type) values($username, $password, $email, $name, $token, $type)',
             {
                 $username: username,
                 $password: password,
                 $email: email,
                 $name: name,
                 $token: token,
+                $type: "user"
             }
         );
 

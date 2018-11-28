@@ -1,6 +1,8 @@
 function log() {
     return async function (req, res, next) {
-        console.log(req.originalUrl);
+        let user = !req.user ? 'Anonymous' : req.user.username;
+        let endpoint = req.originalUrl;
+        console.log(user + ' - ' + endpoint);
         next();
     }
 }
