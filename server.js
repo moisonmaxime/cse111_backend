@@ -4,7 +4,7 @@ let express = require('express'),
 
 app.use(express.json());
 
-let { identify } = require('./middleware/authenticator')
+let { identify } = require('./middleware/authenticator');
 app.use(identify());
 
 let log = require('./middleware/logger');
@@ -27,6 +27,9 @@ food(app);
 
 let drink = require('./endpoints/drink_endpoint');
 drink(app);
+
+let tag = require('./endpoints/tag_endpoint');
+tag(app);
 
 app.listen(port);
 
