@@ -19,6 +19,15 @@ index(app);
 let users = require('./endpoints/users_endpoint');
 users(app);
 
+let containers = require('./endpoints/containers_endpoint');
+containers(app);
+
+let food = require('./endpoints/food_endpoint');
+food(app);
+
+let drink = require('./endpoints/drink_endpoint');
+drink(app);
+
 app.listen(port);
 
 console.log('REST API server started on: ' + port);
