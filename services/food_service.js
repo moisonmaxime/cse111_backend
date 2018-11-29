@@ -1,73 +1,168 @@
 let db = require('../db_manager')
 
+async function createFood(req, res) {
+    try {
+
+        let uid = req.body.uid;
+        let cid = req.body.cid;
+
+        let containerID= await db.get(
+            'select c_id ' +
+            'from user_container, container, user' +
+            'where c_id = $cid' +
+            'and uc_c_id = c_id' +
+            'and uc_u_id = u_id' +
+            'and u_id = $uid'
+            ,
+            { $cid: cid, $uid:uid }
+        );
+
+        if (!containerID) return res.status(400).send ("User doesn't own container.");
+
+
+        await db.run(
+            'INSERT INTO food (f_name, f_brand, f_expiredate, f_calories, f_quantity) ' +
+            'VALUES ($fname, $fbrand, $fexpiredate, $fcalories, $fquantity)',
+            {
+                $fname: req.body.fname,
+                $fbrand: req.body.fbrand,
+                $fexpiredate: req.body.fexpiredate,
+                $fcalories: req.body.fcalories,
+                $fquantity: req.body.fquantity,
+            });
+
+            res.sendStatus(200);
+
+    } catch (e) {
+        console.log(e);
+        return res.sendStatus(404);
+    }
+}
+exports.createFood = createFood;
+
 async function getFood(req, res) {
     try {
-        let food = await db.get('SELECT f_name, Cast ((JulianDay(f_expiredate)-JulianDay(\'now\')) As Integer)as fo \n    ' +
+
+        let uid = req.params.uid;
+        let cid = req.params.cid;
+
+        let containerID= await db.get(
+            'select c_id ' +
+            'from user_container, container, user' +
+            'where c_id = $cid' +
+            'and uc_c_id = c_id' +
+            'and uc_u_id = u_id' +
+            'and u_id = $uid'
+            ,
+            { $cid: cid, $uid:uid }
+        );
+
+        if (!containerID) return res.status(400).send ("User doesn't own container.");
+
+
+        await db.all('SELECT f_name, Cast ((JulianDay(f_expiredate)-JulianDay(\'now\')) As Integer)as fo \n    ' +
             'FROM container, user_container, user, food \n   ' +
             'where uc_user_id = u_id' +
             'and uc_c_id = c_id' +
             'and f_container_id = c_id' +
-            'and c_name = $cname' +
-            'and u_id = $id' +
-            'group by fo '
-            ,{ $id: req.user.id, $cname: req.params.cname });
-        res.send(food);
+            'and c_id = $cid' +
+            'and u_id = $uid' +
+            'order by fo asc'
+            ,{
+                $uid: req.user.uid,
+                $cid: req.params.id
+        });
+
+        res.sendStatus(200);
+
     } catch (e) {
-        console.log(e)
-        res.sendStatus(404);
+        console.log(e);
+        return res.sendStatus(404);
     }
-};
+}
 exports.getFood = getFood;
 
-async function createFood(req, res) {
-    try {
-        let food = await db.run('INSERT INTO' +
-            'food (f_name, f_brand, f_expiredate, f_calories, f_quantity, f_container_id ' +
-            'VALUES ($fname, $fbrand, $fexpiredate, $fcalories, $fquantity, $fcontainerid)'
-            ,{ $fname:req.body.fname, $fbrand: req.body.fbrand , $fexpiredate: req.body.fexpiredate ,
-                $fcalories:req.body.fcalories , $fquantity: req.body.fquanitity , $fcontainerid: req.body.fcontainerid });
-        res.send(food);
-    } catch (e) {
-        console.log(e)
-        res.sendStatus(404);
-    }
-};
-exports.createFood = createFood;
 
 async function updateFood(req, res) {
     try {
-        let food = await db.run('UPDATE food\n    ' +
+
+        let uid = req.body.uid;
+        let cid = req.body.cid;
+
+        let containerID= await db.get(
+            'select c_id ' +
+            'from user_container, container, user' +
+            'where c_id = $cid' +
+            'and uc_c_id = c_id' +
+            'and uc_u_id = u_id' +
+            'and u_id = $uid'
+            ,
+            { $cid: cid, $uid:uid }
+        );
+
+        if (!containerID) return res.status(400).send ("User doesn't own container.");
+
+
+        await db.run('UPDATE food\n    ' +
             'SET f_name = $fname, \n    ' +
             'f_brand = $fbrand, \n    ' +
             'f_expiredate = $fexpiredate, \n    ' +
             'f_calories = $fcalories, \n    ' +
             'f_quantity = $fquantity, \n    ' +
-            'f_container_id = $fcontainerid' +
-            'where f_name = $fname'
-            ,{$fname:req.body.fname, $fbrand: req.body.fbrand , $fexpiredate: req.body.fexpiredate ,
-                $fcalories:req.body.fcalories , $fquantity: req.body.fquanitity, $fcontainerid: req.body.fcontainerid});
-        res.send(food);
+            'where f_id = $fid'
+            ,{
+                $fid: req.body.fid,
+                $fname:req.body.fname,
+                $fbrand: req.body.fbrand ,
+                $fexpiredate: req.body.fexpiredate ,
+                $fcalories:req.body.fcalories ,
+                $fquantity: req.body.fquantity
+            });
+
+        res.sendStatus(200);
+
     } catch (e) {
-        console.log(e)
-        res.sendStatus(404);
+        console.log(e);
+        return res.sendStatus(404);
     }
-};
+}
 exports.updateFood = updateFood;
+
 
 async function deleteFood(req, res) {
     try {
-        let food = await db.run('DELETE\n    ' +
+
+        let uid = req.params.uid;
+        let cid = req.params.cid;
+
+        let containerID= await db.get(
+            'select c_id ' +
+            'from user_container, container, user' +
+            'where c_id = $cid' +
+            'and uc_c_id = c_id' +
+            'and uc_u_id = u_id' +
+            'and u_id = $uid'
+            ,
+            { $cid: cid, $uid:uid }
+        );
+
+        if (!containerID) return res.status(400).send ("User doesn't own container.");
+
+
+        await db.run('DELETE\n    ' +
             'FROM container, user_container, user, food\n   ' +
             ' where uc_user_id = u_id\n    ' +
             'and uc_c_id = c_id\n    ' +
             'and c_id = f_container_id \n    ' +
-            'and c_name = $cname\n    ' +
-            'and f_name = $fname'
-            ,{$cname: req.params.cname, $fname: req.params.fname});
-        res.send(food);
+            'and c_id = $cid\n    ' +
+            'and f_id = $fid'
+            ,{$cid: req.params.cid, $fid: req.params.fid});
+
+        res.sendStatus(200);
+
     } catch (e) {
-        console.log(e)
-        res.sendStatus(404);
+        console.log(e);
+        return res.sendStatus(404);
     }
-};
+}
 exports.deleteFood = deleteFood;
