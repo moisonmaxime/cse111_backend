@@ -24,7 +24,7 @@ async function createFood(req, res) {
         let food = await db.run('INSERT INTO' +
             'food (f_name, f_brand, f_expiredate, f_calories, f_quantity, f_container_id ' +
             'VALUES ($fname, $fbrand, $fexpiredate, $fcalories, $fquantity, $fcontainerid)'
-            ,{ $id: req.user.id, $fname:req.body.fname, $fbrand: req.body.fbrand , $fexpiredate: req.body.fexpiredate ,
+            ,{ $fname:req.body.fname, $fbrand: req.body.fbrand , $fexpiredate: req.body.fexpiredate ,
                 $fcalories:req.body.fcalories , $fquantity: req.body.fquanitity , $fcontainerid: req.body.fcontainerid });
         res.send(food);
     } catch (e) {
@@ -42,9 +42,10 @@ async function updateFood(req, res) {
             'f_expiredate = $fexpiredate, \n    ' +
             'f_calories = $fcalories, \n    ' +
             'f_quantity = $fquantity, \n    ' +
+            'f_container_id = $fcontainerid' +
             'where f_name = $fname'
             ,{$fname:req.body.fname, $fbrand: req.body.fbrand , $fexpiredate: req.body.fexpiredate ,
-                $fcalories:req.body.fcalories , $fquantity: req.body.fquanitity});
+                $fcalories:req.body.fcalories , $fquantity: req.body.fquanitity, $fcontainerid: req.body.fcontainerid});
         res.send(food);
     } catch (e) {
         console.log(e)

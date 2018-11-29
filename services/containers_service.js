@@ -3,13 +3,14 @@ let db = require('../db_manager');
 async function getContainers(req, res) {
     try {
         let containers = await db.get('SELECT c_name ' +
-            'FROM container, user_container, user ' +
+            'FROM container' +
             'where uc_user_id = u_id ' +
-            'and uc_c_id = c_id and u_id = $id '
+            'and uc_c_id = c_id ' +
+            'and u_id = $id '
           ,{ $id: req.user.id });
             res.send(containers);
         } catch (e) {
-        console.log(e)
+        console.log(e);
         res.sendStatus(404);
     }
 };
@@ -25,7 +26,7 @@ async function getContents(req, res) {
             ,{ $id: req.user.id, $cname: req.body.cname});
         res.send(containers);
     } catch (e) {
-        console.log(e)
+        console.log(e);
         res.sendStatus(404);
     }
 };
@@ -38,7 +39,7 @@ async function createContainers(req, res) {
             'VALUES ($cname, $ctype)',{ $cname: req.body.cname, $ctype: req.body.ctype });
         res.send(containers);
     } catch (e) {
-        console.log(e)
+        console.log(e);
         res.sendStatus(404);
     }
 };
@@ -54,7 +55,7 @@ async function updateContainers(req, res) {
             ,{ $id: req.user.id, $cname: req.body.cname, $ctype: req.body.ctype });
         res.send(containers);
     } catch (e) {
-        console.log(e)
+        console.log(e);
         res.sendStatus(404);
     }
 };
@@ -72,7 +73,7 @@ async function deleteContainers(req, res) {
             ,{ $id: req.user.id, $cname: req.body.cname, $ctype: req.body.ctype });
         res.send(containers);
     } catch (e) {
-        console.log(e)
+        console.log(e);
         res.sendStatus(404);
     }
 };

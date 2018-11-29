@@ -32,6 +32,8 @@ food(app);
 let drink = require('./endpoints/drink_endpoint');
 drink(app);
 
+let tag = require('./endpoints/tag_endpoint');
+tag(app);
 
 // --- Exit (404) ---
 // TODO: exit function

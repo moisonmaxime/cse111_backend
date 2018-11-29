@@ -23,7 +23,8 @@ async function createDrink(req, res) {
         let drink = await db.run('INSERT INTO drink\n    ' +
             '(d_id, d_name, d_brand, d_expiredate, d_calories, d_quantity, d_container_id) \n    ' +
             'VALUES ($did, $dname, $dbrand, $dexpiredate, $dcalories, $dquantity, $dcontainerid)'
-            ,{ $dname: req.body.dname, $dbrand: req.body.dbrand , $dexpiredate: req.body.dexpiredate ,  $dcalories: req.body.dcalories , $dquantity: req.body.dquanitity});
+            ,{ $dname: req.body.dname, $dbrand: req.body.dbrand , $dexpiredate: req.body.dexpiredate ,
+                $dcalories: req.body.dcalories , $dquantity: req.body.dquanitity, $dcontainerid: req.body.dcontainerid});
         res.send(drink);
     } catch (e) {
         console.log(e)
@@ -41,8 +42,10 @@ async function updateDrink(req, res) {
             'd_expiredate = $dexpiredate, \n    ' +
             'd_calories = $dcalories, \n    ' +
             'd_quantity = $dquantity, \n    ' +
+            'd_container_id = $dcontainerid' +
             'where d_name = $dname'
-            ,{ $dname: req.body.dname, $dbrand: req.body.dbrand , $dexpiredate: req.body.dexpiredate ,  $dcalories: req.body.dcalories , $dquantity: req.body.dquanitity});
+            ,{ $dname: req.body.dname, $dbrand: req.body.dbrand , $dexpiredate: req.body.dexpiredate ,
+                $dcalories: req.body.dcalories , $dquantity: req.body.dquanitity, $dcontainerid: req.body.dcontainerid});
         res.send(drink);
     } catch (e) {
         console.log(e)

@@ -5,7 +5,7 @@ module.exports = function(app) {
     app.route('/containers')
         .get(authenticate(), service.getContainers);
 
-    app.route('/containers')
+    app.route('/containers/:cname')
         .get(authenticate(), service.getContents);
 
     app.route('/containers')
