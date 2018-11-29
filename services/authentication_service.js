@@ -17,7 +17,6 @@ async function login(req, res) {
 
         if (!match) return res.status(400).send("Invalid credentials");
 
-        Error(500);
         return res.json({ token: signJWT(response.username) });
 
     } catch (e) {
@@ -25,7 +24,6 @@ async function login(req, res) {
         return res.sendStatus(500);
     }
 };
-
 exports.login = login;
 
 async function register(req, res) {

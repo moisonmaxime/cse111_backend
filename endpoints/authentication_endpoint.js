@@ -14,8 +14,7 @@ const registerSchema = Joi.object({
         username: Joi.string().min(3).max(50).required(),
         password: Joi.string().min(3).max(50).required(),
         email: Joi.string().email().min(3).max(50).required(),
-        name: Joi.string().min(3).max(50).required(),
-        password: Joi.string().min(3).max(50).required()
+        name: Joi.string().min(3).max(50).required()
     })
 }).unknown();
 
