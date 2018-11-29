@@ -33,3 +33,11 @@ function run(query, dict) {
         }));
 }
 exports.run = run;
+
+async function findUser(username) {
+    return get(
+        'Select u_username as username, u_password as hash from user where username = $username',
+        { $username: username}
+    );
+}
+exports.findUser = findUser;

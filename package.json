@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodemon $NODE_DEBUG_OPTION server.js",
+    "start": "node server.js",
+    "start-dev": "nodemon $NODE_DEBUG_OPTION server.js",
     "migrate": "./database/migrate.sh"
   },
   "dependencies": {

@@ -6,10 +6,7 @@ async function login(req, res) {
         let username = req.body.username;
         let password = req.body.password;
 
-        let response = await db.get(
-            'Select u_username as username, u_password as hash from user where username = $username',
-            { $username: username}
-        );
+        let response = await db.findUser(username);
 
         if (!response) return res.status(400).send("Invalid credentials");
 
@@ -33,12 +30,9 @@ async function register(req, res) {
         let name = req.body.name;
         let email = req.body.email;
 
-        let usersWithSameUsername = await db.all(
-            'select u_username from user where u_username = $username',
-            { $username: username }
-        );
+        let userWithSameUsername = await db.findUser(username);
 
-        if (usersWithSameUsername.length > 0) return res.status(409).send('User already exists');
+        if (userWithSameUsername) return res.status(409).send('User already exists');
 
         await db.run(
             'Insert into user(u_username, u_password, u_email, u_name, u_type) values($username, $password, $email, $name, $type)',
