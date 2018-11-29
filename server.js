@@ -4,12 +4,16 @@ let express = require('express'),
 
 app.use(express.json());
 
+
+// --- Middleware ---
 let { identify } = require('./middleware/authenticator')
 app.use(identify());
 
 let log = require('./middleware/logger');
 app.use(log());
 
+
+// --- Endpoints ---
 let auth = require('./endpoints/authentication_endpoint');
 auth(app);
 
@@ -28,6 +32,10 @@ food(app);
 let drink = require('./endpoints/drink_endpoint');
 drink(app);
 
-app.listen(port);
 
-console.log('REST API server started on: ' + port);
+// --- Exit (404) ---
+// TODO: exit function
+
+app.listen(port, () => {
+    console.log('REST API server started on: ' + port);
+});
