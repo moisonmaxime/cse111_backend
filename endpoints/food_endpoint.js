@@ -16,13 +16,6 @@ const createFood = Joi.object({
     })
 }).unknown();
 
-const getFood = Joi.object({
-    body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-    })
-}).unknown();
-
-
 const updateFood = Joi.object({
     body: Joi.object({
         cid: Joi.number().min(1).max(50).required(),
@@ -45,8 +38,8 @@ const deleteFood = Joi.object({
 module.exports = function(app) {
 
 
-    app.route('/food/')
-        .get(authenticate(),validate(getFood), service.getFood);
+    app.route('/food/:cid')
+        .get(authenticate(), service.getFood);
 
     app.route('/food')
         .post(authenticate(),validate(createFood), service.createFood);

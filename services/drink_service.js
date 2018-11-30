@@ -7,14 +7,14 @@ async function getDrink(req, res) {
         let cid = req.params.cid;
 
 
-        let drink = await db.all('SELECT d_name, Cast ((JulianDay(d_expiredate)-JulianDay(\'now\')) As Integer)as do    ' +
+        let drink = await db.all('SELECT d_name, Cast ((JulianDay(d_expiredate)-JulianDay(\'now\')) As Integer)as daysToEat    ' +
             'FROM container, user_container, user, drink   ' +
             'where uc_user_id = u_id    ' +
             'and uc_c_id = c_id   ' +
             'and d_container_id = c_id ' +
             'and c_id = $cid ' +
             'and u_id = $uid ' +
-            'order by do asc '
+            'order by daysToEat asc '
             ,{
                 $uid: uid,
                 $cid: cid

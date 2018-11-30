@@ -16,12 +16,6 @@ const createDrink = Joi.object({
     })
 }).unknown();
 
-const getDrink = Joi.object({
-    body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-    })
-}).unknown();
-
 
 const updateDrink = Joi.object({
     body: Joi.object({
@@ -44,8 +38,8 @@ const deleteDrink = Joi.object({
 
 module.exports = function(app) {
 
-    app.route('/drink')
-        .get(authenticate(),validate(getDrink), service.getDrink);
+    app.route('/drink/:cid')
+        .get(authenticate(), service.getDrink);
 
     app.route('/drink')
         .post(authenticate(),validate(createDrink), service.createDrink);
