@@ -1,2 +1,9 @@
-let { authenticate } = require('../middleware/authenticator'),
-    service = require('../services/audience_service');
+let service = require('../services/audience_service');
+
+module.exports = function(app) {
+
+    app.route('/audience/:tname')
+        .get(service.getAudience);
+
+
+};
