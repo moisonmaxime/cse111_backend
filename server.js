@@ -35,6 +35,9 @@ drink(app);
 let tag = require('./endpoints/tag_endpoint');
 tag(app);
 
+let audience = require('./endpoints/audience_endpoint');
+audience(app);
+
 // --- Exit (404) ---
 // TODO: exit function
 
