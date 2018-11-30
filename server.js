@@ -35,6 +35,9 @@ drink(app);
 let tag = require('./endpoints/tag_endpoint');
 tag(app);
 
+let audience = require('./endpoints/audience_endpoint');
+audience(app);
+
 app.listen(port, () => {
     console.log('REST API server started on: ' + port);
 });
