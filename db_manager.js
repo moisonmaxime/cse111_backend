@@ -25,11 +25,11 @@ exports.all = all;
 
 function run(query, dict) {
     return new Promise((resolve, reject) => db.run(query, dict,
-        function (e, r)  {
+        function (e)  {
             if (e) {
                 return reject(e);
             }
-            return resolve(r);
+            return resolve(this.lastID);
         }));
 }
 exports.run = run;
