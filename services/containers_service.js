@@ -22,29 +22,13 @@ exports.getContainer = getContainer;
 async function getContents(req, res) {
     try {
 
-       // let uid = req.user.id;
-    /*    let cid = req.params.cid;
-
-        let containerID= await db.get(
-            'select c_id ' +
-            'from user_container, container, user' +
-            'where c_id = $cid' +
-            'and uc_c_id = c_id' +
-            'and uc_user_id = u_id' +
-            'and u_id = $uid'
-            ,
-            { $cid: cid, $uid:uid }
-        );
-
-        if (!containerID) return res.status(400).send ("User doesn't own container.");
-*/
         let contents= await db.all('SELECT f_name, d_name ' +
-            'FROM container, food, drink, user_container' +
-            'where d_container_id = c_id' +
-            'and f_container_id = c_id' +
-            'and uc_c_id = c_id' +
-            'and c_name = $cname' +
-            'and u_id= $id'
+            'FROM container, food, drink, user_container ' +
+            'where d_container_id = c_id ' +
+            'and f_container_id = c_id ' +
+            'and uc_c_id = c_id ' +
+            'and c_name = $cname ' +
+            'and uc_user_id = $id '
             ,{
                 $id: req.user.id,
                 $cname: req.params.cname

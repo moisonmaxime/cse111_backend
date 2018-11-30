@@ -45,8 +45,8 @@ const deleteFood = Joi.object({
 module.exports = function(app) {
 
 
-    app.route('/food')
-        .get(authenticate(),validate(getFood),  service.getFood);
+    app.route('/food/')
+        .get(authenticate(),validate(getFood), service.getFood);
 
     app.route('/food')
         .post(authenticate(),validate(createFood), service.createFood);

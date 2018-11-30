@@ -7,21 +7,21 @@ async function getDrink(req, res) {
         let cid = req.params.cid;
 
 
-        await db.all('SELECT d_name, Cast ((JulianDay(d_expiredate)-JulianDay(\'now\')) As Integer)as do \n    ' +
-            'FROM container, user_container, user, drink \n    ' +
-            'where uc_user_id = u_id \n    ' +
-            'and uc_c_id = c_id \n    ' +
-            'and d_container_id = c_id\n    ' +
-            'and c_id = $cid' +
-            'and u_id = $uid' +
-            'order by do asc'
+        let drink = await db.all('SELECT d_name, Cast ((JulianDay(d_expiredate)-JulianDay(\'now\')) As Integer)as do    ' +
+            'FROM container, user_container, user, drink   ' +
+            'where uc_user_id = u_id    ' +
+            'and uc_c_id = c_id   ' +
+            'and d_container_id = c_id ' +
+            'and c_id = $cid ' +
+            'and u_id = $uid ' +
+            'order by do asc '
             ,{
                 $uid: uid,
                 $cid: cid
             });
 
 
-        res.sendStatus(200);
+        res.send(drink);
 
     } catch (e) {
         console.log(e);
@@ -38,9 +38,9 @@ async function createDrink(req, res) {
 
         let containerID= await db.get(
             'select uc_c_id ' +
-            'from user_container' +
-            'where uc_c_id = $cid' +
-            'and uc_user_id = $uid'
+            'from user_container ' +
+            'where uc_c_id = $cid ' +
+            'and uc_user_id = $uid '
             ,
             { $cid: cid, $uid:uid }
         );
@@ -55,7 +55,7 @@ async function createDrink(req, res) {
                 $dexpiredate: req.body.dexpiredate ,
                 $dcalories: req.body.dcalories ,
                 $dquantity: req.body.dquantity,
-                $dcontainerid: containerID
+                $dcontainerid: cid
             });
 
         res.sendStatus(200);

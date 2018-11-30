@@ -8,8 +8,8 @@ async function createFood(req, res) {
 
         let containerID= await db.get(
             'select uc_c_id ' +
-            'from user_container' +
-            'where uc_c_id = $cid' +
+            'from user_container ' +
+            'where uc_c_id = $cid ' +
             'and uc_user_id = $uid'
             ,
             { $cid: cid, $uid:uid }
@@ -26,7 +26,7 @@ async function createFood(req, res) {
                 $fexpiredate: req.body.fexpiredate,
                 $fcalories: req.body.fcalories,
                 $fquantity: req.body.fquantity,
-                $fcontainerid: containerID
+                $fcontainerid: cid
             });
 
             res.sendStatus(200);
@@ -44,21 +44,32 @@ async function getFood(req, res) {
         let uid = req.user.id;
         let cid = req.params.cid;
 
+        let containerID= await db.get(
+            'select uc_c_id ' +
+            'from user_container ' +
+            'where uc_c_id = $cid ' +
+            'and uc_user_id = $uid'
+            ,
+            { $cid: cid, $uid:uid }
+        );
 
-        await db.all('SELECT f_name, Cast ((JulianDay(f_expiredate)-JulianDay(\'now\')) As Integer)as fo \n    ' +
-            'FROM container, user_container, user, food \n   ' +
-            'where uc_user_id = u_id' +
-            'and uc_c_id = c_id' +
-            'and f_container_id = c_id' +
-            'and c_id = $cid' +
-            'and u_id = $uid' +
-            'order by fo asc'
+        if (!containerID) return res.status(400).send ("User doesn't own container.");
+
+        let food = await db.all('SELECT f_name, f_brand, f_expiredate, f_calories, f_quantity, ' +
+            'Cast ((JulianDay(f_expiredate)-JulianDay(\'now\')) As Integer)as fo ' +
+            'FROM container, user_container, user, food   ' +
+            'where uc_user_id = u_id ' +
+            'and uc_c_id = c_id ' +
+            'and f_container_id = c_id ' +
+            'and c_id = $cid ' +
+            'and u_id = $uid ' +
+            'order by fo asc '
             ,{
                 $uid: uid,
                 $cid: cid
-        });
+            });
 
-        res.sendStatus(200);
+        res.send(food);
 
     } catch (e) {
         console.log(e);

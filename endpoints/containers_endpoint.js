@@ -6,22 +6,6 @@ let { validate } = require('../middleware/joi_validator'),
     Joi = require('joi');
 
 
-const getContainer = Joi.object({
-    body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-        id: Joi.number().min(1).max(50).required()
-    })
-}).unknown();
-
-
-const getContents = Joi.object({
-    body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-
-    })
-}).unknown();
-
-
 const createContainer = Joi.object({
     body: Joi.object({
         cname: Joi.string().min(3).max(50).required(),
