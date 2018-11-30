@@ -3,7 +3,7 @@ let db = require('../db_manager')
 async function createFood(req, res) {
     try {
 
-        let uid = req.body.uid;
+        let uid = req.user.id;
         let cid = req.body.cid;
 
         let containerID= await db.get(
@@ -11,14 +11,13 @@ async function createFood(req, res) {
             'from user_container, container, user' +
             'where c_id = $cid' +
             'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
+            'and uc_user_id = u_id' +
             'and u_id = $uid'
             ,
             { $cid: cid, $uid:uid }
         );
 
         if (!containerID) return res.status(400).send ("User doesn't own container.");
-
 
         await db.run(
             'INSERT INTO food (f_name, f_brand, f_expiredate, f_calories, f_quantity) ' +
@@ -43,7 +42,7 @@ exports.createFood = createFood;
 async function getFood(req, res) {
     try {
 
-        let uid = req.params.uid;
+        let uid = req.user.id;
         let cid = req.params.cid;
 
         let containerID= await db.get(
@@ -51,7 +50,7 @@ async function getFood(req, res) {
             'from user_container, container, user' +
             'where c_id = $cid' +
             'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
+            'and uc_user_id = u_id' +
             'and u_id = $uid'
             ,
             { $cid: cid, $uid:uid }
@@ -86,7 +85,7 @@ exports.getFood = getFood;
 async function updateFood(req, res) {
     try {
 
-        let uid = req.body.uid;
+        let uid = req.user.id;
         let cid = req.body.cid;
 
         let containerID= await db.get(
@@ -94,7 +93,7 @@ async function updateFood(req, res) {
             'from user_container, container, user' +
             'where c_id = $cid' +
             'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
+            'and uc_user_id = u_id' +
             'and u_id = $uid'
             ,
             { $cid: cid, $uid:uid }
@@ -132,7 +131,7 @@ exports.updateFood = updateFood;
 async function deleteFood(req, res) {
     try {
 
-        let uid = req.params.uid;
+        let uid = req.user.id;
         let cid = req.params.cid;
 
         let containerID= await db.get(
@@ -140,7 +139,7 @@ async function deleteFood(req, res) {
             'from user_container, container, user' +
             'where c_id = $cid' +
             'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
+            'and uc_user_id = u_id' +
             'and u_id = $uid'
             ,
             { $cid: cid, $uid:uid }

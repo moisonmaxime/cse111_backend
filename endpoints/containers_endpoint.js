@@ -8,7 +8,6 @@ let { validate } = require('../middleware/joi_validator'),
 
 const getContainer = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cid: Joi.number().min(1).max(50).required(),
         id: Joi.number().min(1).max(50).required()
     })
@@ -17,9 +16,7 @@ const getContainer = Joi.object({
 
 const getContents = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cid: Joi.number().min(1).max(50).required(),
-        id: Joi.number().min(1).max(50).required(),
 
     })
 }).unknown();
@@ -27,7 +24,6 @@ const getContents = Joi.object({
 
 const createContainer = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cname: Joi.string().min(3).max(50).required(),
         ctype: Joi.string().min(3).max(50).required()
     })
@@ -36,9 +32,9 @@ const createContainer = Joi.object({
 
 const updateContainer = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cid: Joi.number().min(1).max(50).required(),
         cname: Joi.string().min(3).max(50).required(),
+        cnewname: Joi.string().min(3).max(50).required(),
         ctype: Joi.string().min(3).max(50).required()
     })
 }).unknown();
@@ -46,19 +42,17 @@ const updateContainer = Joi.object({
 
 const deleteContainer = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
-        cid: Joi.number().min(1).max(50).required(),
-        uid: Joi.number().min(1).max(50).required(),
+        cid: Joi.number().min(1).max(50).required()
 
     })
 }).unknown();
 
 module.exports = function(app) {
     app.route('/containers')
-        .get(authenticate(),validate(getContainer), service.getContainer);
+        .get(authenticate(), service.getContainer);
 
     app.route('/containers/:cname')
-        .get(authenticate(),validate(getContents), service.getContents);
+        .get(authenticate(), service.getContents);
 
     app.route('/containers')
         .post(authenticate(),validate(createContainer), service.createContainers);
@@ -67,6 +61,6 @@ module.exports = function(app) {
         .put(authenticate(),validate(updateContainer), service.updateContainers);
 
     app.route('/containers')
-        .delete(authenticate(),validate(deleteContainer), service.deleteContainers);
+        .delete(authenticate(),/*validate(deleteContainer),*/ service.deleteContainers);
 
 };

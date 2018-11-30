@@ -7,7 +7,6 @@ let { validate } = require('../middleware/joi_validator'),
 
 const createDrink = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cid: Joi.number().min(1).max(50).required(),
         dname: Joi.string().min(3).max(50).required(),
         dbrand: Joi.string().min(3).max(50).required(),
@@ -20,14 +19,12 @@ const createDrink = Joi.object({
 const getDrink = Joi.object({
     body: Joi.object({
         cid: Joi.number().min(1).max(50).required(),
-        uid: Joi.number().min(1).max(50).required()
     })
 }).unknown();
 
 
 const updateDrink = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cid: Joi.number().min(1).max(50).required(),
         did: Joi.number().min(1).max(50).required(),
         dname: Joi.string().min(3).max(50).required(),
@@ -40,7 +37,6 @@ const updateDrink = Joi.object({
 
 const deleteDrink = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cid: Joi.number().min(1).max(50).required(),
         did: Joi.number().min(1).max(50).required()
     })

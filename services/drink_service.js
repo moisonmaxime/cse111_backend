@@ -3,7 +3,7 @@ let db = require('../db_manager')
 async function getDrink(req, res) {
     try {
 
-        let uid = req.params.uid;
+        let uid = req.user.id;
         let cid = req.params.cid;
 
         let containerID= await db.get(
@@ -11,7 +11,7 @@ async function getDrink(req, res) {
             'from user_container, container, user' +
             'where c_id = $cid' +
             'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
+            'and uc_user_id = u_id' +
             'and u_id = $uid'
             ,
             { $cid: cid, $uid:uid }
@@ -45,7 +45,7 @@ exports.getDrink = getDrink;
 
 async function createDrink(req, res) {
     try {
-        let uid = req.body.uid;
+        let uid = req.user.id;
         let cid = req.body.cid;
 
         let containerID= await db.get(
@@ -53,7 +53,7 @@ async function createDrink(req, res) {
             'from user_container, container, user' +
             'where c_id = $cid' +
             'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
+            'and uc_user_id = u_id' +
             'and u_id = $uid'
             ,
             { $cid: cid, $uid:uid }
@@ -84,7 +84,7 @@ exports.createDrink = createDrink;
 async function updateDrink(req, res) {
     try {
 
-        let uid = req.body.uid;
+        let uid = req.user.id;
         let cid = req.body.cid;
 
         let containerID= await db.get(
@@ -92,7 +92,7 @@ async function updateDrink(req, res) {
             'from user_container, container, user' +
             'where c_id = $cid' +
             'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
+            'and uc_user_id = u_id' +
             'and u_id = $uid'
             ,
             { $cid: cid, $uid:uid }
@@ -129,7 +129,7 @@ exports.updateDrink = updateDrink;
 async function deleteDrink(req, res) {
     try {
 
-        let uid = req.params.uid;
+        let uid = req.user.id;
         let cid = req.params.cid;
 
         let containerID= await db.get(
@@ -137,7 +137,7 @@ async function deleteDrink(req, res) {
             'from user_container, container, user' +
             'where c_id = $cid' +
             'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
+            'and uc_user_id = u_id' +
             'and u_id = $uid'
             ,
             { $cid: cid, $uid:uid }
