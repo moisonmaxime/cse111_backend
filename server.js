@@ -6,7 +6,7 @@ app.use(express.json());
 
 
 // --- Middleware ---
-let { identify } = require('./middleware/authenticator')
+let { identify } = require('./middleware/authenticator');
 app.use(identify());
 
 let log = require('./middleware/logger');
@@ -34,9 +34,6 @@ drink(app);
 
 let tag = require('./endpoints/tag_endpoint');
 tag(app);
-
-// --- Exit (404) ---
-// TODO: exit function
 
 app.listen(port, () => {
     console.log('REST API server started on: ' + port);
