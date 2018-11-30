@@ -32,11 +32,12 @@ exports.getTagContents = getTagContents;
 
 async function createTag(req, res) {
     try {
-        let tag = await db.run('INSERT INTO' +
-            'container (t_name)' +
+         await db.run('INSERT INTO ' +
+            'tag (t_name)' +
             'VALUES ($tname)'
             ,{ $tname: req.body.tname });
-        res.send(tag);
+
+        res.send(200);
     } catch (e) {
         console.log(e);
         res.sendStatus(404);

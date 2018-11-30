@@ -51,9 +51,9 @@ module.exports = function(app) {
     app.route('/food')
         .post(authenticate(),validate(createFood), service.createFood);
 
-    app.route('/food/:fname')
+    app.route('/food')
         .put(authenticate(),validate(updateFood),  service.updateFood);
 
-    app.route('/food/:fname')
+    app.route('/food')
         .delete(authenticate(),validate(deleteFood),  service.deleteFood);
 };
