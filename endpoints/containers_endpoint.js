@@ -34,7 +34,6 @@ const updateContainer = Joi.object({
     body: Joi.object({
         cid: Joi.number().min(1).max(50).required(),
         cname: Joi.string().min(3).max(50).required(),
-        cnewname: Joi.string().min(3).max(50).required(),
         ctype: Joi.string().min(3).max(50).required()
     })
 }).unknown();
@@ -57,10 +56,10 @@ module.exports = function(app) {
     app.route('/containers')
         .post(authenticate(),validate(createContainer), service.createContainers);
 
-    app.route('/containers')
+    app.route('/containers/:cid')
         .put(authenticate(),validate(updateContainer), service.updateContainers);
 
-    app.route('/containers')
-        .delete(authenticate(),/*validate(deleteContainer),*/ service.deleteContainers);
+    app.route('/containers/:cid')
+        .delete(authenticate(),validate(deleteContainer), service.deleteContainers);
 
 };

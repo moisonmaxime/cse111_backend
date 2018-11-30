@@ -88,17 +88,26 @@ exports.createContainers = createContainers;
 
 async function updateContainers(req, res) {
     try {
-
         let uid = req.user.id;
+        let cid = req.body.cid;
 
-        await db.run('UPDATE container' +
-            'SET c_name = $cname, c_type = $ctype' +
-            'WHERE c_id = $cid'
+        let containerId= await db.get(
+            'select uc_c_id ' +
+            'from user_container ' +
+            'where uc_c_id = $cid ' +
+            'and uc_user_id = $uid '
+            ,{ $cid: cid, $uid:uid }
+        );
+
+        if (!containerId) return res.status(400).send ("User doesn't own container.");
+
+         await db.run('UPDATE container ' +
+            'SET c_name = $cname, c_type = $ctype ' +
+            'WHERE c_id = $pcid'
             ,{
-                $cid: req.body.cid,
+                $pcid: containerId,
                 $cname: req.body.cname,
                 $ctype: req.body.ctype,
-                $id: uid
             });
 
         res.sendStatus(200);
@@ -113,28 +122,27 @@ exports.updateContainers = updateContainers;
 async function deleteContainers(req, res) {
     try {
 
-             let uid = req.user.id;
-             let cid = req.params.cid;
+        let uid = req.user.id;
+        let cid = req.body.cid;
 
-                 let containerID= await db.get(
-                     'select c_id ' +
-                     'from user_container, container, user' +
-                     'where c_id = $cid' +
-                     'and uc_c_id = c_id' +
-                     'and uc_user_id = u_id' +
-                     'and u_id = $uid'
-                     ,
-                     { $cid: cid, $uid:uid }
-                 );
-                 if (!containerID) return res.status(400).send ("User doesn't own container.");
-
-
-        await db.run('DELETE' +
-            'FROM container' +
-            'where c_id = $cid'
+        let containerId= await db.get(
+            'select uc_c_id ' +
+            'from user_container ' +
+            'where uc_c_id = $cid ' +
+            'and uc_user_id = $uid '
             ,{
-                $uid: req.user.uid,
-                $cid: req.params.cid
+                $cid: cid,
+                $uid:uid
+            }
+        );
+
+        if (!containerId) return res.status(400).send ("User doesn't own container.");
+
+        await db.run('DELETE ' +
+            'FROM container ' +
+            'where c_id = $pcid'
+            ,{
+                $pcid: containerId
             });
 
         res.sendStatus(200);
