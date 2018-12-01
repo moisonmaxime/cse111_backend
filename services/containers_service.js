@@ -1,9 +1,9 @@
 let db = require('../db_manager');
 
-async function getContainer(req, res) {
+async function listContainers(req, res) {
     try {
 
-        let containers = await db.all('SELECT c_name ' +
+        let containers = await db.all('SELECT c_id as id, c_name as name, c_type as type ' +
             'FROM container, user_container, user ' +
             'where uc_user_id = u_id ' +
             'and uc_c_id = c_id ' +
@@ -17,29 +17,53 @@ async function getContainer(req, res) {
         return res.sendStatus(500);
     }
 }
-exports.getContainer = getContainer;
+exports.listContainers = listContainers;
 
 async function getContents(req, res) {
     try {
 
+        let containerInfo = await db.get(
+            'SELECT c_id as id, c_name as name, c_type as type ' +
+            'FROM container, user_container ' +
+            'WHERE uc_c_id = $id ' +
+            'AND uc_user_id = $user_id ' +
+            'AND uc_c_id = c_id',
+            {
+                $id: req.params.id,
+                $user_id: req.user.id
+            });
 
-        let contents= await db.all('SELECT f_name, d_name ' +
-            'FROM container, food, drink, user_container ' +
-            'where d_container_id = c_id ' +
-            'and f_container_id = c_id ' +
-            'and uc_c_id = c_id ' +
-            'and c_id = $cid ' +
-            'and uc_user_id = $id '
-            ,{
-                $id: req.user.id,
-                $cid: req.params.cid
+        if (!containerInfo) return res.sendStatus(404);
+
+        let foods = await db.all(
+            'SELECT f_id as id, f_name as name, f_brand as brand, ' +
+            'f_expiredate as expiration, f_calories as calories, f_quantity as quantity' +
+            'FROM food ' +
+            'WHERE f_container_id = $id',
+            {
+                $id: req.params.id
+            });
+
+        let drinks = await db.all(
+            'SELECT d_id as id, d_name as name, d_brand as brand, ' +
+            'd_expiredate as expiration, d_calories as calories, d_quantity as quantity' +
+            'FROM drink ' +
+            'WHERE d_container_id = $id',
+            {
+                $id: req.params.id
+            });
+
+        res.send({
+            id: containerInfo.id,
+            name: containerInfo.name,
+            type: containerInfo.type,
+            foods: foods,
+            drinks: drinks
         });
-
-        res.send(contents);
 
     } catch (e) {
         console.log(e);
-        return res.sendStatus(404);
+        return res.sendStatus(500);
     }
 }
 exports.getContents = getContents;
@@ -48,18 +72,16 @@ exports.getContents = getContents;
 async function createContainers(req, res) {
     try {
 
-        let uid = req.user.id;
-
         let newContainerID = await db.run('INSERT INTO ' +
             'container (c_name, c_type) ' +
-            'VALUES ($cname, $ctype)',
+            'VALUES ($name, $type)',
             {
-                $cname: req.body.cname,
-                $ctype: req.body.ctype
+                $name: req.body.name,
+                $type: req.body.type
             });
 
         await db.run('INSERT INTO user_container (uc_c_id, uc_user_id) VALUES ($container, $user)',
-            { $container: newContainerID, $user: uid});
+            { $container: newContainerID, $user: req.user.id});
 
         res.sendStatus(200);
 
@@ -73,26 +95,24 @@ exports.createContainers = createContainers;
 
 async function updateContainers(req, res) {
     try {
-        let uid = req.user.id;
-        let cid = req.body.cid;
 
         let containerId= await db.get(
             'select uc_c_id ' +
             'from user_container ' +
             'where uc_c_id = $cid ' +
             'and uc_user_id = $uid '
-            ,{ $cid: cid, $uid:uid }
+            ,{ $cid: req.params.id, $uid: req.user.id }
         );
 
-        if (!containerId) return res.status(400).send ("User doesn't own container.");
+        if (!containerId) return res.status(400).send ("User doesn't own container");
 
-         await db.run('UPDATE container ' +
-            'SET c_name = $cname, c_type = $ctype ' +
-            'WHERE c_id = $pcid'
+        await db.run('UPDATE container ' +
+            'SET c_name = $name, c_type = $type ' +
+            'WHERE c_id = $id'
             ,{
-                $pcid: cid,
-                $cname: req.body.cname,
-                $ctype: req.body.ctype,
+                $id: req.params.id,
+                $name: req.body.name,
+                $type: req.body.type
             });
 
         res.sendStatus(200);
@@ -107,28 +127,20 @@ exports.updateContainers = updateContainers;
 async function deleteContainers(req, res) {
     try {
 
-        let uid = req.user.id;
-        let cid = req.params.cid;
-
         let containerId= await db.get(
             'select uc_c_id ' +
             'from user_container ' +
             'where uc_c_id = $cid ' +
             'and uc_user_id = $uid '
-            ,{
-                $cid: cid,
-                $uid:uid
-            }
+            ,{ $cid: req.params.id, $uid: req.user.id }
         );
 
-        if (!containerId) return res.status(400).send ("User doesn't own container.");
+        if (!containerId) return res.status(400).send ("User doesn't own container");
 
         await db.run('DELETE ' +
             'FROM container ' +
-            'where c_id = $pcid'
-            ,{
-                $pcid: cid
-            });
+            'where c_id = $id'
+            ,{ $id: req.params.id });
 
         res.sendStatus(200);
 
