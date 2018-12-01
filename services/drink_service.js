@@ -3,37 +3,25 @@ let db = require('../db_manager')
 async function getDrink(req, res) {
     try {
 
-        let uid = req.params.uid;
+        let uid = req.user.id;
         let cid = req.params.cid;
 
-        let containerID= await db.get(
-            'select c_id ' +
-            'from user_container, container, user' +
-            'where c_id = $cid' +
-            'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
-            'and u_id = $uid'
-            ,
-            { $cid: cid, $uid:uid }
-        );
 
-        if (!containerID) return res.status(400).send ("User doesn't own container.");
-
-        await db.all('SELECT d_name, Cast ((JulianDay(d_expiredate)-JulianDay(\'now\')) As Integer)as do \n    ' +
-            'FROM container, user_container, user, drink \n    ' +
-            'where uc_user_id = u_id \n    ' +
-            'and uc_c_id = c_id \n    ' +
-            'and d_container_id = c_id\n    ' +
-            'and c_id = $cid' +
-            'and u_id = $uid' +
-            'order by do asc'
+        let drink = await db.all('SELECT d_name, Cast ((JulianDay(d_expiredate)-JulianDay(\'now\')) As Integer)as daysToEat    ' +
+            'FROM container, user_container, user, drink   ' +
+            'where uc_user_id = u_id    ' +
+            'and uc_c_id = c_id   ' +
+            'and d_container_id = c_id ' +
+            'and c_id = $cid ' +
+            'and u_id = $uid ' +
+            'order by daysToEat asc '
             ,{
-                $uid: req.user.uid,
-                $cid: req.params.id
+                $uid: uid,
+                $cid: cid
             });
 
 
-        res.sendStatus(200);
+        res.send(drink);
 
     } catch (e) {
         console.log(e);
@@ -45,30 +33,29 @@ exports.getDrink = getDrink;
 
 async function createDrink(req, res) {
     try {
-        let uid = req.body.uid;
+        let uid = req.user.id;
         let cid = req.body.cid;
 
         let containerID= await db.get(
-            'select c_id ' +
-            'from user_container, container, user' +
-            'where c_id = $cid' +
-            'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
-            'and u_id = $uid'
+            'select uc_c_id ' +
+            'from user_container ' +
+            'where uc_c_id = $cid ' +
+            'and uc_user_id = $uid '
             ,
             { $cid: cid, $uid:uid }
         );
 
         if (!containerID) return res.status(400).send ("User doesn't own container.");
 
-        await db.run('INSERT INTO drink( d_name, d_brand, d_expiredate, d_calories, d_quantity) ' +
-            'VALUES ($dname, $dbrand, $dexpiredate, $dcalories, $dquantity)'
+        await db.run('INSERT INTO drink( d_name, d_brand, d_expiredate, d_calories, d_quantity, d_container_id) ' +
+            'VALUES ($dname, $dbrand, $dexpiredate, $dcalories, $dquantity, $dcontainerid)'
             ,{
                 $dname: req.body.dname,
                 $dbrand: req.body.dbrand ,
                 $dexpiredate: req.body.dexpiredate ,
                 $dcalories: req.body.dcalories ,
-                $dquantity: req.body.dquantity
+                $dquantity: req.body.dquantity,
+                $dcontainerid: cid
             });
 
         res.sendStatus(200);
@@ -83,29 +70,25 @@ exports.createDrink = createDrink;
 
 async function updateDrink(req, res) {
     try {
-
-        let uid = req.body.uid;
+        let uid = req.user.id;
         let cid = req.body.cid;
 
         let containerID= await db.get(
-            'select c_id ' +
-            'from user_container, container, user' +
-            'where c_id = $cid' +
-            'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
-            'and u_id = $uid'
-            ,
-            { $cid: cid, $uid:uid }
+            'select uc_c_id ' +
+            'from user_container' +
+            'where uc_c_id = $cid' +
+            'and uc_user_id = $uid'
+            , { $cid: cid, $uid:uid }
         );
 
         if (!containerID) return res.status(400).send ("User doesn't own container.");
 
-        await db.run('UPDATE drink\n    ' +
-            'SET d_name = $dname, \n    ' +
-            'd_brand = $dbrand, \n    ' +
-            'd_expiredate = $dexpiredate, \n    ' +
-            'd_calories = $dcalories, \n    ' +
-            'd_quantity = $dquantity, \n    ' +
+        await db.run('UPDATE drink' +
+            'SET d_name = $dname, ' +
+            'd_brand = $dbrand, ' +
+            'd_expiredate = $dexpiredate,' +
+            'd_calories = $dcalories,' +
+            'd_quantity = $dquantity,' +
             'where d_id = $did'
             ,{
                 $did: req.body.did,
@@ -120,7 +103,7 @@ async function updateDrink(req, res) {
 
     } catch (e) {
         console.log(e);
-        return res.sendStatus(404);
+        return res.sendStatus(500);
     }
 }
 exports.updateDrink = updateDrink;
@@ -129,36 +112,31 @@ exports.updateDrink = updateDrink;
 async function deleteDrink(req, res) {
     try {
 
-        let uid = req.params.uid;
+        let uid = req.user.id;
         let cid = req.params.cid;
 
         let containerID= await db.get(
-            'select c_id ' +
-            'from user_container, container, user' +
-            'where c_id = $cid' +
-            'and uc_c_id = c_id' +
-            'and uc_u_id = u_id' +
-            'and u_id = $uid'
+            'select d_container_id ' +
+            'from user_container, drink ' +
+            'where uc_c_id = d_container_id ' +
+            'and uc_c_id = $cid ' +
+            'and uc_user_id = $uid'
             ,
             { $cid: cid, $uid:uid }
         );
 
         if (!containerID) return res.status(400).send ("User doesn't own container.");
 
-        await db.run('DELETE\n    ' +
-            'FROM container, user_container, user, drink\n    ' +
-            'where uc_user_id = u_id\n    ' +
-            'and uc_c_id = c_id\n    ' +
-            'and c_id = d_container_id \n    ' +
-            'and c_id = $cid\n    ' +
-            'and d_id = $did'
-            ,{$cid: req.params.cid, $did: req.params.did});
+        await db.run('DELETE ' +
+            'FROM drink ' +
+            'where d_id = $did'
+            ,{$did: req.params.did});
 
         res.sendStatus(200);
 
     } catch (e) {
         console.log(e);
-        return res.sendStatus(404);
+        return res.sendStatus(500);
     }
 }
 exports.deleteDrink = deleteDrink;

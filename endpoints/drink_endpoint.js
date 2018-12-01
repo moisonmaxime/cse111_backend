@@ -7,7 +7,6 @@ let { validate } = require('../middleware/joi_validator'),
 
 const createDrink = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cid: Joi.number().min(1).max(50).required(),
         dname: Joi.string().min(3).max(50).required(),
         dbrand: Joi.string().min(3).max(50).required(),
@@ -17,17 +16,9 @@ const createDrink = Joi.object({
     })
 }).unknown();
 
-const getDrink = Joi.object({
-    body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-        uid: Joi.number().min(1).max(50).required()
-    })
-}).unknown();
-
 
 const updateDrink = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cid: Joi.number().min(1).max(50).required(),
         did: Joi.number().min(1).max(50).required(),
         dname: Joi.string().min(3).max(50).required(),
@@ -38,25 +29,19 @@ const updateDrink = Joi.object({
     })
 }).unknown();
 
-const deleteDrink = Joi.object({
-    body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
-        cid: Joi.number().min(1).max(50).required(),
-        did: Joi.number().min(1).max(50).required()
-    })
-}).unknown();
+
 
 module.exports = function(app) {
 
-    app.route('/drink')
-        .get(authenticate(),validate(getDrink), service.getDrink);
+    app.route('/drink/:cid')
+        .get(authenticate(), service.getDrink);
 
     app.route('/drink')
         .post(authenticate(),validate(createDrink), service.createDrink);
 
-    app.route('/drink/:dname')
+    app.route('/drink/:cid/:did')
         .put(authenticate(),validate(updateDrink), service.updateDrink);
 
-    app.route('/drink/:dname')
-        .delete(authenticate(),validate(deleteDrink), service.deleteDrink);
+    app.route('/drink/:cid/:did')
+        .delete(authenticate(), service.deleteDrink);
 };

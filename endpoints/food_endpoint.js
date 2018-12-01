@@ -7,7 +7,6 @@ let { validate } = require('../middleware/joi_validator'),
 
 const createFood = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cid: Joi.number().min(1).max(50).required(),
         fname: Joi.string().min(3).max(50).required(),
         fbrand: Joi.string().min(3).max(50).required(),
@@ -17,17 +16,8 @@ const createFood = Joi.object({
     })
 }).unknown();
 
-const getFood = Joi.object({
-    body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-        uid: Joi.number().min(1).max(50).required()
-    })
-}).unknown();
-
-
 const updateFood = Joi.object({
     body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
         cid: Joi.number().min(1).max(50).required(),
         fid: Joi.number().min(1).max(50).required(),
         fname: Joi.string().min(3).max(50).required(),
@@ -38,26 +28,18 @@ const updateFood = Joi.object({
     })
 }).unknown();
 
-const deleteFood = Joi.object({
-    body: Joi.object({
-        uid: Joi.number().min(1).max(50).required(),
-        cid: Joi.number().min(1).max(50).required(),
-        fid: Joi.number().min(1).max(50).required()
-    })
-}).unknown();
-
 module.exports = function(app) {
 
 
-    app.route('/food')
-        .get(authenticate(),validate(getFood),  service.getFood);
+    app.route('/food/:cid')
+        .get(authenticate(), service.getFood);
 
     app.route('/food')
         .post(authenticate(),validate(createFood), service.createFood);
 
-    app.route('/food/:fname')
-        .put(authenticate(),validate(updateFood),  service.updateFood);
+    app.route('/food/:cid/:fid')
+        .put(authenticate(), validate(updateFood), service.updateFood);
 
-    app.route('/food/:fname')
-        .delete(authenticate(),validate(deleteFood),  service.deleteFood);
+    app.route('/food/:cid/:fid')
+        .delete(authenticate(), service.deleteFood);
 };
