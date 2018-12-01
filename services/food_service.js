@@ -130,9 +130,10 @@ async function deleteFood(req, res) {
         let cid = req.params.cid;
 
         let containerID= await db.get(
-            'select uc_c_id ' +
-            'from user_container' +
-            'where uc_c_id = $cid' +
+            'select f_container_id ' +
+            'from user_container, food ' +
+            'where uc_c_id = f_container_id ' +
+            'and uc_c_id = $cid ' +
             'and uc_user_id = $uid'
             ,
             { $cid: cid, $uid:uid }
@@ -140,14 +141,10 @@ async function deleteFood(req, res) {
 
         if (!containerID) return res.status(400).send ("User doesn't own container.");
 
-        await db.run('DELETE\n    ' +
-            'FROM container, user_container, user, food\n   ' +
-            ' where uc_user_id = u_id\n    ' +
-            'and uc_c_id = c_id\n    ' +
-            'and c_id = f_container_id \n    ' +
-            'and c_id = $cid\n    ' +
-            'and f_id = $fid'
-            ,{$cid: cid, $fid: req.params.fid});
+        await db.run('DELETE ' +
+            'FROM food ' +
+            'where f_id = $fid'
+            ,{$fid: req.params.fid});
 
         res.sendStatus(200);
 

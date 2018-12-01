@@ -22,16 +22,17 @@ exports.getContainer = getContainer;
 async function getContents(req, res) {
     try {
 
+
         let contents= await db.all('SELECT f_name, d_name ' +
             'FROM container, food, drink, user_container ' +
             'where d_container_id = c_id ' +
             'and f_container_id = c_id ' +
             'and uc_c_id = c_id ' +
-            'and c_name = $cname ' +
+            'and c_id = $cid ' +
             'and uc_user_id = $id '
             ,{
                 $id: req.user.id,
-                $cname: req.params.cname
+                $cid: req.params.cid
         });
 
         res.send(contents);
@@ -89,7 +90,7 @@ async function updateContainers(req, res) {
             'SET c_name = $cname, c_type = $ctype ' +
             'WHERE c_id = $pcid'
             ,{
-                $pcid: containerId,
+                $pcid: cid,
                 $cname: req.body.cname,
                 $ctype: req.body.ctype,
             });
@@ -107,7 +108,7 @@ async function deleteContainers(req, res) {
     try {
 
         let uid = req.user.id;
-        let cid = req.body.cid;
+        let cid = req.params.cid;
 
         let containerId= await db.get(
             'select uc_c_id ' +
@@ -126,7 +127,7 @@ async function deleteContainers(req, res) {
             'FROM container ' +
             'where c_id = $pcid'
             ,{
-                $pcid: containerId
+                $pcid: cid
             });
 
         res.sendStatus(200);

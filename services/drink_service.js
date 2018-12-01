@@ -105,7 +105,7 @@ async function updateDrink(req, res) {
 
     } catch (e) {
         console.log(e);
-        return res.sendStatus(404);
+        return res.sendStatus(500);
     }
 }
 exports.updateDrink = updateDrink;
@@ -118,9 +118,10 @@ async function deleteDrink(req, res) {
         let cid = req.params.cid;
 
         let containerID= await db.get(
-            'select uc_c_id ' +
-            'from user_container' +
-            'where uc_c_id = $cid' +
+            'select d_container_id ' +
+            'from user_container, drink ' +
+            'where uc_c_id = d_container_id ' +
+            'and uc_c_id = $cid ' +
             'and uc_user_id = $uid'
             ,
             { $cid: cid, $uid:uid }
@@ -128,20 +129,16 @@ async function deleteDrink(req, res) {
 
         if (!containerID) return res.status(400).send ("User doesn't own container.");
 
-        await db.run('DELETE\n    ' +
-            'FROM container, user_container, user, drink\n    ' +
-            'where uc_user_id = u_id\n    ' +
-            'and uc_c_id = c_id\n    ' +
-            'and c_id = d_container_id \n    ' +
-            'and c_id = $cid\n    ' +
-            'and d_id = $did'
-            ,{$cid: cid, $did: req.params.did});
+        await db.run('DELETE ' +
+            'FROM drink ' +
+            'where d_id = $did'
+            ,{$did: req.params.did});
 
         res.sendStatus(200);
 
     } catch (e) {
         console.log(e);
-        return res.sendStatus(404);
+        return res.sendStatus(500);
     }
 }
 exports.deleteDrink = deleteDrink;

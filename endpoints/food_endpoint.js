@@ -28,13 +28,6 @@ const updateFood = Joi.object({
     })
 }).unknown();
 
-const deleteFood = Joi.object({
-    body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-        fid: Joi.number().min(1).max(50).required()
-    })
-}).unknown();
-
 module.exports = function(app) {
 
 
@@ -47,6 +40,6 @@ module.exports = function(app) {
     app.route('/food')
         .put(authenticate(),validate(updateFood),  service.updateFood);
 
-    app.route('/food')
-        .delete(authenticate(),validate(deleteFood),  service.deleteFood);
+    app.route('/food/:cid/:fid')
+        .delete(authenticate(),  service.deleteFood);
 };
