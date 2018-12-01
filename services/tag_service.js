@@ -37,7 +37,7 @@ async function createTag(req, res) {
             'VALUES ($tname) '
             ,{ $tname: req.body.tname });
 
-        res.send(200);
+        res.sendStatus(200);
     } catch (e) {
         console.log(e);
         res.sendStatus(404);

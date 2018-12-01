@@ -55,7 +55,7 @@ async function getFood(req, res) {
 
         if (!containerID) return res.status(400).send ("User doesn't own container.");
 
-        let food = await db.all('SELECT f_name, f_brand, f_expiredate, f_calories, f_quantity, ' +
+        let food = await db.all('SELECT f_name, ' +
             'Cast ((JulianDay(f_expiredate)-JulianDay(\'now\')) As Integer)as daysToEat ' +
             'FROM container, user_container, user, food   ' +
             'where uc_user_id = u_id ' +
