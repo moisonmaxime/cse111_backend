@@ -34,10 +34,44 @@ function run(query, dict) {
 }
 exports.run = run;
 
-async function findUser(username) {
+
+
+async function getUserLogin(username) {
     return get(
         'Select u_username as username, u_password as hash from user where username = $username',
         { $username: username}
     );
 }
-exports.findUser = findUser;
+exports.getUserLogin = getUserLogin;
+
+async function isUsernameTaken(username) {
+    let user = await get(
+        'Select * from user where u_username = $username',
+        { $username: username}
+    );
+    return (!user) ? false : true;
+}
+exports.isUsernameTaken = isUsernameTaken;
+
+async function getCurrentUser(userID) {
+    return get(
+        'select u_username as username, u_name as name, u_email as email, u_type as type from user where u_id = $id',
+        { $id: userID}
+    );
+}
+exports.getCurrentUser = getCurrentUser;
+
+async function createUser(username, password, email, name, type) {
+    return run(
+        'Insert into user(u_username, u_password, u_email, u_name, u_type) values($username, $password, $email, $name, $type)',
+        {
+            $username: username,
+            $password: password,
+            $email: email,
+            $name: name,
+            $type: type
+        }
+    );
+}
+exports.createUser = createUser;
+

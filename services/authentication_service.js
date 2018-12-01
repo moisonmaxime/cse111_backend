@@ -6,7 +6,7 @@ async function login(req, res) {
         let username = req.body.username;
         let password = req.body.password;
 
-        let response = await db.findUser(username);
+        let response = await db.getUserLogin(username);
 
         if (!response) return res.status(400).send("Invalid credentials");
 
@@ -29,22 +29,8 @@ async function register(req, res) {
         let password = await hashPassword(req.body.password);
         let name = req.body.name;
         let email = req.body.email;
-
-        let userWithSameUsername = await db.findUser(username);
-
-        if (userWithSameUsername) return res.status(409).send('User already exists');
-
-        await db.run(
-            'Insert into user(u_username, u_password, u_email, u_name, u_type) values($username, $password, $email, $name, $type)',
-            {
-                $username: username,
-                $password: password,
-                $email: email,
-                $name: name,
-                $type: "user"
-            }
-        );
-
+        if (await db.isUsernameTaken(username)) return res.status(409).send('User already exists');
+        await db.createUser(username, password, email, name, "user");
         return res.status(200).send({ token: signJWT(username) });
 
     } catch (e) {
