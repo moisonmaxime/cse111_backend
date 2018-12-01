@@ -5,27 +5,34 @@ let { validate } = require('../middleware/joi_validator'),
     Joi = require('joi');
 
 
-const createDrink = Joi.object({
+const createSchema = Joi.object({
     body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-        dname: Joi.string().min(3).max(50).required(),
-        dbrand: Joi.string().min(3).max(50).required(),
-        dexpiredate: Joi.date().required(),
-        dcalories: Joi.number().min(1).max(50).required(),
-        dquantity: Joi.number().min(1).max(50).required()
+        container_id: Joi.number().integer().required(),
+        name: Joi.string().min(3).max(50).required(),
+        brand: Joi.string().min(3).max(50).optional(),
+        expiration: Joi.date().optional(),
+        calories: Joi.number().integer().optional(),
+        quantity: Joi.number().integer().optional()
     })
 }).unknown();
 
 
-const updateDrink = Joi.object({
+const getSchema = Joi.object({
+    params: Joi.object({
+        id: Joi.number().integer().required()
+    })
+}).unknown();
+
+const updateSchema = Joi.object({
+    params: Joi.object({
+        id: Joi.number().integer().required()
+    }),
     body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-        did: Joi.number().min(1).max(50).required(),
-        dname: Joi.string().min(3).max(50).required(),
-        dbrand: Joi.string().min(3).max(50).required(),
-        dexpiredate: Joi.date().required(),
-        dcalories: Joi.number().min(1).max(50).required(),
-        dquantity: Joi.number().min(1).max(50).required()
+        name: Joi.string().min(3).max(50).required(),
+        brand: Joi.string().min(3).max(50).optional(),
+        expiration: Joi.date().optional(),
+        calories: Joi.number().integer().optional(),
+        quantity: Joi.number().integer().optional()
     })
 }).unknown();
 
@@ -33,15 +40,15 @@ const updateDrink = Joi.object({
 
 module.exports = function(app) {
 
-    app.route('/drink/:cid')
-        .get(authenticate(), service.getDrink);
+    // app.route('/drink/:id')
+    //     .get(authenticate(), validate(getSchema), service.getDrink);
 
     app.route('/drink')
-        .post(authenticate(),validate(createDrink), service.createDrink);
+        .post(authenticate(), validate(createSchema), service.createDrink);
 
-    app.route('/drink/:cid/:did')
-        .put(authenticate(),validate(updateDrink), service.updateDrink);
+    app.route('/drink/:id')
+        .put(authenticate(), validate(updateSchema), service.updateDrink);
 
-    app.route('/drink/:cid/:did')
-        .delete(authenticate(), service.deleteDrink);
+    app.route('/drink/:id')
+        .delete(authenticate(), validate(getSchema), service.deleteDrink);
 };

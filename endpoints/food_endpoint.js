@@ -5,41 +5,49 @@ let { validate } = require('../middleware/joi_validator'),
     Joi = require('joi');
 
 
-const createFood = Joi.object({
+const createSchema = Joi.object({
     body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-        fname: Joi.string().min(3).max(50).required(),
-        fbrand: Joi.string().min(3).max(50).required(),
-        fexpiredate: Joi.date().required(),
-        fcalories: Joi.number().min(1).max(50).required(),
-        fquantity: Joi.number().min(1).max(50).required()
+        container_id: Joi.number().integer().required(),
+        name: Joi.string().min(3).max(50).required(),
+        brand: Joi.string().min(3).max(50).optional(),
+        expiration: Joi.date().optional(),
+        calories: Joi.number().integer().optional(),
+        quantity: Joi.number().integer().optional()
     })
 }).unknown();
 
-const updateFood = Joi.object({
+
+const getSchema = Joi.object({
+    params: Joi.object({
+        id: Joi.number().integer().required()
+    })
+}).unknown();
+
+const updateSchema = Joi.object({
+    params: Joi.object({
+        id: Joi.number().integer().required()
+    }),
     body: Joi.object({
-        cid: Joi.number().min(1).max(50).required(),
-        fid: Joi.number().min(1).max(50).required(),
-        fname: Joi.string().min(3).max(50).required(),
-        fbrand: Joi.string().min(3).max(50).required(),
-        fexpiredate: Joi.date().required(),
-        fcalories: Joi.number().min(1).max(50).required(),
-        fquantity: Joi.number().min(1).max(50).required()
+        name: Joi.string().min(3).max(50).required(),
+        brand: Joi.string().min(3).max(50).optional(),
+        expiration: Joi.date().optional(),
+        calories: Joi.number().integer().optional(),
+        quantity: Joi.number().integer().optional()
     })
 }).unknown();
 
 module.exports = function(app) {
 
 
-    app.route('/food/:cid')
-        .get(authenticate(), service.getFood);
+    // app.route('/food/:id')
+    //     .get(authenticate(), validate(getSchema), service.getFood);
 
     app.route('/food')
-        .post(authenticate(),validate(createFood), service.createFood);
+        .post(authenticate(),validate(createSchema), service.createFood);
 
-    app.route('/food/:cid/:fid')
-        .put(authenticate(), validate(updateFood), service.updateFood);
+    app.route('/food/:id')
+        .put(authenticate(), validate(updateSchema), service.updateFood);
 
-    app.route('/food/:cid/:fid')
-        .delete(authenticate(), service.deleteFood);
+    app.route('/food/:id')
+        .delete(authenticate(), validate(getSchema), service.deleteFood);
 };
