@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# psql -f $FILE -d fridge
+# if [ -f "fridge.db" ]; then
+
+
 echo "Removing old database..."
 rm fridge.db
 
