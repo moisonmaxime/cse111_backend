@@ -6,5 +6,5 @@ CREATE TABLE drink (
     d_calories     INT,
     d_quantity     INT,
     d_container_id INT       NOT NULL,
-    CONSTRAINT dc FOREIGN KEY (d_container_id) REFERENCES container (c_id) on delete cascade
+    CONSTRAINT dc FOREIGN KEY (d_container_id) REFERENCES container (c_id)
 );
