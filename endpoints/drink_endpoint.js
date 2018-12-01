@@ -39,7 +39,7 @@ module.exports = function(app) {
     app.route('/drink')
         .post(authenticate(),validate(createDrink), service.createDrink);
 
-    app.route('/drink/:did')
+    app.route('/drink/:cid/:did')
         .put(authenticate(),validate(updateDrink), service.updateDrink);
 
     app.route('/drink/:cid/:did')

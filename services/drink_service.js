@@ -70,7 +70,6 @@ exports.createDrink = createDrink;
 
 async function updateDrink(req, res) {
     try {
-
         let uid = req.user.id;
         let cid = req.body.cid;
 
@@ -79,8 +78,7 @@ async function updateDrink(req, res) {
             'from user_container' +
             'where uc_c_id = $cid' +
             'and uc_user_id = $uid'
-            ,
-            { $cid: cid, $uid:uid }
+            , { $cid: cid, $uid:uid }
         );
 
         if (!containerID) return res.status(400).send ("User doesn't own container.");

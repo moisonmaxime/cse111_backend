@@ -96,13 +96,12 @@ async function updateFood(req, res) {
 
         if (!containerID) return res.status(400).send ("User doesn't own container.");
 
-
-        await db.run('UPDATE food\n    ' +
-            'SET f_name = $fname, \n    ' +
-            'f_brand = $fbrand, \n    ' +
-            'f_expiredate = $fexpiredate, \n    ' +
-            'f_calories = $fcalories, \n    ' +
-            'f_quantity = $fquantity, \n    ' +
+        await db.run('UPDATE food ' +
+            'SET f_name = $fname, ' +
+            'f_brand = $fbrand,  ' +
+            'f_expiredate = $fexpiredate, ' +
+            'f_calories = $fcalories, ' +
+            'f_quantity = $fquantity, ' +
             'where f_id = $fid'
             ,{
                 $fid: req.body.fid,
@@ -117,7 +116,7 @@ async function updateFood(req, res) {
 
     } catch (e) {
         console.log(e);
-        return res.sendStatus(404);
+        return res.sendStatus(500);
     }
 }
 exports.updateFood = updateFood;
@@ -150,7 +149,7 @@ async function deleteFood(req, res) {
 
     } catch (e) {
         console.log(e);
-        return res.sendStatus(404);
+        return res.sendStatus(500);
     }
 }
 exports.deleteFood = deleteFood;

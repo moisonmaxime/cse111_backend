@@ -37,9 +37,9 @@ module.exports = function(app) {
     app.route('/food')
         .post(authenticate(),validate(createFood), service.createFood);
 
-    app.route('/food')
-        .put(authenticate(),validate(updateFood),  service.updateFood);
+    app.route('/food/:cid/:fid')
+        .put(authenticate(), validate(updateFood), service.updateFood);
 
     app.route('/food/:cid/:fid')
-        .delete(authenticate(),  service.deleteFood);
+        .delete(authenticate(), service.deleteFood);
 };
