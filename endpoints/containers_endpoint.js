@@ -34,6 +34,9 @@ module.exports = function(app) {
     app.route('/containers')
         .get(authenticate(), service.listContainers);
 
+    app.route('/containers/:id/add-user')
+        .get(authenticate(), validate(getContentsSchema), service.getContents);
+
     app.route('/containers/:id')
         .get(authenticate(), validate(getContentsSchema), service.getContents);
 
