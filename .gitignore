@@ -2,3 +2,5 @@
 fridge.db
 node_modules/
 key.pem
+.DS_Store
+**/.DS_Store
