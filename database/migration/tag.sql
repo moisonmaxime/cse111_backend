@@ -1,4 +1,4 @@
 CREATE TABLE tag (
-    t_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    t_id serial PRIMARY KEY,
     t_name VARCHAR(25) NOT NULL
 );
