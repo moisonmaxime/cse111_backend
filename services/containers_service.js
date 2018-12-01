@@ -37,7 +37,7 @@ async function getContents(req, res) {
 
         let foods = await db.all(
             'SELECT f_id as id, f_name as name, f_brand as brand, ' +
-            'f_expiredate as expiration, f_calories as calories, f_quantity as quantity' +
+            'f_expiredate as expiration, f_calories as calories, f_quantity as quantity ' +
             'FROM food ' +
             'WHERE f_container_id = $id',
             {
@@ -46,7 +46,7 @@ async function getContents(req, res) {
 
         let drinks = await db.all(
             'SELECT d_id as id, d_name as name, d_brand as brand, ' +
-            'd_expiredate as expiration, d_calories as calories, d_quantity as quantity' +
+            'd_expiredate as expiration, d_calories as calories, d_quantity as quantity ' +
             'FROM drink ' +
             'WHERE d_container_id = $id',
             {

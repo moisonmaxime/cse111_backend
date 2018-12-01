@@ -74,12 +74,12 @@ async function updateDrink(req, res) {
 
         if (!drinkID) return res.status(400).send ("User doesn't own drink");
 
-        await db.run('UPDATE drink' +
+        await db.run('UPDATE drink ' +
             'SET d_name = $name, ' +
             'd_brand = $brand, ' +
-            'd_expiredate = $expiration,' +
-            'd_calories = $calories,' +
-            'd_quantity = $quantity,' +
+            'd_expiredate = $expiration, ' +
+            'd_calories = $calories, ' +
+            'd_quantity = $quantity ' +
             'where d_id = $id'
             ,{
                 $name: req.body.name,
