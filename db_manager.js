@@ -35,7 +35,7 @@ function run(query, dict) {
 exports.run = run;
 
 
-
+// --- User ---
 async function getUserLogin(username) {
     return get(
         'Select u_username as username, u_password as hash from user where username = $username',
@@ -49,7 +49,7 @@ async function isUsernameTaken(username) {
         'Select * from user where u_username = $username',
         { $username: username}
     );
-    return (!user) ? false : true;
+    return !(!user);
 }
 exports.isUsernameTaken = isUsernameTaken;
 
@@ -75,3 +75,46 @@ async function createUser(username, password, email, name, type) {
 }
 exports.createUser = createUser;
 
+
+// // --- Container ---
+// async function getAllContainers(userID) {
+//     return all(
+//         'select c_id as id, c_name as name, c_type as type from container where c_user_id = $id',
+//         { $id: userID}
+//     );
+// }
+// exports.getAllContainers = getAllContainers;
+//
+// async function userOwnsContainer(userID, containerID) {
+//     let container = await get(
+//         'select * from user_container where uc_user_id = $user_id and uc_c_id = $container_id',
+//         { $user_id: userID, $container_id: containerID }
+//     );
+//     return !(!container);
+// }
+// exports.userOwnsContainer = userOwnsContainer;
+//
+// async function getContainer(containerID) {
+//     return get(
+//         'select c_id as id, c_name as name, c_type as type from container where c_id = $container_id',
+//         { $container_id: containerID }
+//     );
+// }
+// exports.getContainer = getContainer;
+//
+// async function createContainer(userID, name, type) {
+//
+//     let lastID = await run('INSERT INTO ' +
+//         'container (c_name, c_type) ' +
+//         'VALUES ($cname, $ctype)',
+//         {
+//             $cname: req.body.cname,
+//             $ctype: req.body.ctype
+//         });
+//
+//     return get(
+//         'select c_id as id, c_name as name, c_type as type from container where c_id = $container_id',
+//         { $container_id: containerID }
+//     );
+// }
+// exports.createContainer = createContainer;
