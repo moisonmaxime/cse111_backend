@@ -8,7 +8,6 @@ async function login(req, res) {
 
         let response = await db.getUserLogin(username);
 
-        console.log(response);
         if (!response) return res.status(400).send("Invalid credentials");
 
         let match = checkPassword(password, response.hash);
