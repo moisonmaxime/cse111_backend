@@ -5,7 +5,6 @@ const db = require('../database/db_manager');
 function identify() {
     return async function(req, res, next) {
         try {
-            console.log(await db.userOwnsContainer(1, 2));
             let token = !req.headers.authorization ? undefined : req.headers.authorization.split(' ')[1];
             if (!token) throw Error("User did not provide token");
             let username = verifyJWT(token);
