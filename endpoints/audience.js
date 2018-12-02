@@ -1,4 +1,4 @@
-let service = require('../services/audience_service');
+let service = require('../services/audience');
 
 module.exports = function(app) {
 

@@ -1,5 +1,5 @@
 let { authenticate } = require('../middleware/authenticator'),
-    service = require('../services/users_service');
+    service = require('../services/users');
 
 module.exports = function(app) {
     app.route('/user-info')

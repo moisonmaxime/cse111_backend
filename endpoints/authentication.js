@@ -1,4 +1,4 @@
-let service = require('../services/authentication_service'),
+let service = require('../services/authentication'),
     { validate } = require('../middleware/joi_validator'),
     Joi = require('joi');
 

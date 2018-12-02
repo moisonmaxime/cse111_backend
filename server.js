@@ -14,28 +14,28 @@ app.use(log());
 
 
 // --- Endpoints ---
-let auth = require('./endpoints/authentication_endpoint');
+let auth = require('./endpoints/authentication');
 auth(app);
 
-let index = require('./endpoints/index_endpoint');
+let index = require('./endpoints/index');
 index(app);
 
-let users = require('./endpoints/users_endpoint');
+let users = require('./endpoints/users');
 users(app);
 
-let containers = require('./endpoints/containers_endpoint');
+let containers = require('./endpoints/containers');
 containers(app);
 
-let food = require('./endpoints/food_endpoint');
+let food = require('./endpoints/food');
 food(app);
 
-let drink = require('./endpoints/drink_endpoint');
+let drink = require('./endpoints/drink');
 drink(app);
 
-let tag = require('./endpoints/tag_endpoint');
+let tag = require('./endpoints/tag');
 tag(app);
 
-let audience = require('./endpoints/audience_endpoint');
+let audience = require('./endpoints/audience');
 audience(app);
 
 app.listen(port, () => {

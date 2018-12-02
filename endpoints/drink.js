@@ -1,5 +1,5 @@
 let { authenticate } = require('../middleware/authenticator'),
-    service = require('../services/drink_service');
+    service = require('../services/drink');
 
 let { validate } = require('../middleware/joi_validator'),
     Joi = require('joi');
