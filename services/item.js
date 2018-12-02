@@ -17,17 +17,17 @@ let db = require('../db_manager')
 //             });
 //
 //
-//         res.send(food);
+//         res.send(item);
 //
 //     } catch (e) {
 //         console.log(e);
 //         return res.sendStatus(404);
 //     }
 // }
-// exports.getFood = getFood;
+// exports.getItem = getItem;
 
 
-async function createFood(req, res) {
+async function createItem(req, res) {
     try {
 
         let containerID= await db.get(
@@ -40,7 +40,7 @@ async function createFood(req, res) {
 
         if (!containerID) return res.status(400).send ("User doesn't own container");
 
-        await db.run('INSERT INTO food( f_name, f_brand, f_expiredate, f_calories, f_quantity, f_container_id) ' +
+        await db.run('INSERT INTO item( f_name, f_brand, f_expiredate, f_calories, f_quantity, f_container_id) ' +
             'VALUES ($name, $brand, $expiration, $calories, $quantity, $container_id)'
             ,{
                 $name: req.body.name,
@@ -58,23 +58,23 @@ async function createFood(req, res) {
         return res.sendStatus(404);
     }
 }
-exports.createFood = createFood;
+exports.createItem = createItem;
 
 
-async function updateFood(req, res) {
+async function updateItem(req, res) {
     try {
 
-        let foodID= await db.get(
+        let itemID= await db.get(
             'select f_id ' +
-            'from food, user_container ' +
+            'from item, user_container ' +
             'where uc_c_id = f_container_id ' +
             'and uc_user_id = $user_id ' +
             'and f_id = $id',
             { $id: req.params.id, $user_id: req.user.id });
 
-        if (!foodID) return res.status(400).send ("User doesn't own food");
+        if (!itemID) return res.status(400).send ("User doesn't own item");
 
-        await db.run('UPDATE food ' +
+        await db.run('UPDATE item ' +
             'SET f_name = $name, ' +
             'f_brand = $brand, ' +
             'f_expiredate = $expiration, ' +
@@ -97,24 +97,24 @@ async function updateFood(req, res) {
         return res.sendStatus(500);
     }
 }
-exports.updateFood = updateFood;
+exports.updateItem = updateItem;
 
 
-async function deleteFood(req, res) {
+async function deleteItem(req, res) {
     try {
 
-        let foodID= await db.get(
+        let itemID= await db.get(
             'select f_id ' +
-            'from food, user_container ' +
+            'from item, user_container ' +
             'where uc_c_id = f_container_id ' +
             'and uc_user_id = $user_id ' +
             'and f_id = $id',
             { $id: req.params.id, $user_id: req.user.id });
 
-        if (!foodID) return res.status(400).send ("User doesn't own food");
+        if (!itemID) return res.status(400).send ("User doesn't own item");
 
         await db.run('DELETE ' +
-            'FROM food ' +
+            'FROM item ' +
             'where f_id = $id'
             ,{$id: req.params.id});
 
@@ -125,4 +125,4 @@ async function deleteFood(req, res) {
         return res.sendStatus(500);
     }
 }
-exports.deleteFood = deleteFood;
+exports.deleteItem = deleteItem;
