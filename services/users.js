@@ -1,4 +1,4 @@
-let db = require('../db_manager');
+let db = require('../database/db_manager');
 
 async function getCurrentUser(req, res) {
     try {
