@@ -87,7 +87,8 @@ exports.getContainerInfo = getContainerInfo;
 
 async function getContainerContents(containerID) {
     return run(
-        'Select u_username as username, u_password as hash from users where u_username = $1',
+        'Select f_id as id, f_brand as brand, f_name as name, f_expiredate as expiration, f_calories as calories, f_quantity as quantity ' +
+        'from item where f_container_id = $1',
         [containerID]
     );
 }
@@ -161,3 +162,62 @@ async function getContainerUsers(containerID) {
     );
 }
 exports.getContainerUsers = getContainerUsers;
+
+
+// --- Item ---
+
+async function createItem(name, brand, expiration, calories, quantity, containerID) {
+
+    return run('INSERT INTO item( f_name, f_brand, f_expiredate, f_calories, f_quantity, f_container_id) ' +
+        'VALUES ($1, $2, $3, $4, $5, $6) returning f_id'
+        ,[
+            name,
+            brand ,
+            expiration ,
+            calories ,
+            quantity,
+            containerID
+        ]);
+}
+exports.createItem = createItem;
+
+async function userOwnsItem(userID, itemID) {
+    let item = await get(
+        'select f_id ' +
+        'from item, user_container ' +
+        'where uc_c_id = f_container_id ' +
+        'and uc_user_id = $1 ' +
+        'and f_id = $2',
+        [itemID, userID]);
+    return Boolean(item);
+}
+exports.userOwnsItem = userOwnsItem;
+
+async function updateItem(name, brand, expiration, calories, quantity, id) {
+    return run('UPDATE item ' +
+        'SET f_name = $1, ' +
+        'f_brand = $2, ' +
+        'f_expiredate = $3, ' +
+        'f_calories = $4, ' +
+        'f_quantity = $5 ' +
+        'where f_id = $6',
+        [
+            name,
+            brand ,
+            expiration ,
+            calories ,
+            quantity,
+            id
+        ]);
+}
+exports.updateItem = updateItem;
+
+async function deleteItem(itemID) {
+    return run(
+        'DELETE ' +
+        'FROM item ' +
+        'where f_id = $1',
+        [itemID]
+    );
+}
+exports.deleteItem = deleteItem;
