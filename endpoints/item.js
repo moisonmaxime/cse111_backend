@@ -1,5 +1,5 @@
 let { authenticate } = require('../middleware/authenticator'),
-    service = require('../services/food');
+    service = require('../services/item');
 
 let { validate } = require('../middleware/joi_validator'),
     Joi = require('joi');
@@ -39,15 +39,15 @@ const updateSchema = Joi.object({
 module.exports = function(app) {
 
 
-    // app.route('/food/:id')
-    //     .get(authenticate(), validate(getSchema), service.getFood);
+    // app.route('/item/:id')
+    //     .get(authenticate(), validate(getSchema), service.getItem);
 
-    app.route('/food')
-        .post(authenticate(),validate(createSchema), service.createFood);
+    app.route('/item')
+        .post(authenticate(),validate(createSchema), service.createItem);
 
-    app.route('/food/:id')
-        .put(authenticate(), validate(updateSchema), service.updateFood);
+    app.route('/item/:id')
+        .put(authenticate(), validate(updateSchema), service.updateItem);
 
-    app.route('/food/:id')
-        .delete(authenticate(), validate(getSchema), service.deleteFood);
+    app.route('/item/:id')
+        .delete(authenticate(), validate(getSchema), service.deleteItem);
 };
