@@ -88,7 +88,7 @@ exports.getContainerInfo = getContainerInfo;
 
 async function getContainerContents(containerID) {
     return run(
-        'Select f_id as id, f_brand as brand, f_name as name, f_expiredate as expiration, f_calories as calories, f_quantity as quantity ' +
+        'Select f_id as id, f_brand as brand, f_name as name, to_char(f_expiredate, \'MM/DD/YYYY\') as expiration, f_calories as calories, f_quantity as quantity ' +
         'from item where f_container_id = $1',
         [containerID]
     );
