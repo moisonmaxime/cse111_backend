@@ -34,6 +34,15 @@ async function getCurrentUser(userID) {
 }
 exports.getCurrentUser = getCurrentUser;
 
+async function identifyUser(username) {
+    return get(
+        'Select u_id as id, u_type as type, u_username as username ' +
+        'from users where u_username = $1',
+        [username]
+    );
+}
+exports.identifyUser = identifyUser;
+
 async function createUser(username, password, email, name, type) {
     return run(
         `Insert into users(u_username, u_password, u_email, u_name, u_type) values($1, $2, $3, $4, $5)`,
