@@ -111,7 +111,7 @@ exports.createContainer = createContainer;
 
 async function userOwnsContainer(userID, containerID) {
 
-    let containerId = await run(
+    let containerId = await get(
         'select uc_c_id ' +
         'from user_container ' +
         'where uc_c_id = $1 ' +
