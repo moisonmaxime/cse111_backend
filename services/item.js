@@ -30,7 +30,7 @@ let db = require('../database/queries')
 async function createItem(req, res) {
     try {
 
-        if (!await db.userOwnsContainer(req.user.id, req.params.id))
+        if (!await db.userOwnsContainer(req.user.id, req.body.container_id))
             return res.status(400).send ("User doesn't own container");
 
         await db.createItem(
