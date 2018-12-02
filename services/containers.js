@@ -10,7 +10,7 @@ async function listContainers(req, res) {
             'and u_id = $id',
             { $id: req.user.id });
 
-        res.send(containers);
+        return res.send(containers);
 
     } catch (e) {
         console.log(e);
@@ -53,7 +53,7 @@ async function getContents(req, res) {
                 $id: req.params.id
             });
 
-        res.send({
+        return res.send({
             id: containerInfo.id,
             name: containerInfo.name,
             type: containerInfo.type,
@@ -69,7 +69,7 @@ async function getContents(req, res) {
 exports.getContents = getContents;
 
 
-async function createContainers(req, res) {
+async function createContainer(req, res) {
     try {
 
         let newContainerID = await db.run('INSERT INTO ' +
@@ -83,20 +83,20 @@ async function createContainers(req, res) {
         await db.run('INSERT INTO user_container (uc_c_id, uc_user_id) VALUES ($container, $user)',
             { $container: newContainerID, $user: req.user.id});
 
-        res.sendStatus(200);
+        return res.sendStatus(200);
 
     } catch (e) {
         console.log(e);
         return res.sendStatus(500);
     }
 }
-exports.createContainers = createContainers;
+exports.createContainer = createContainer;
 
 
-async function updateContainers(req, res) {
+async function updateContainer(req, res) {
     try {
 
-        let containerId= await db.get(
+        let containerId = await db.get(
             'select uc_c_id ' +
             'from user_container ' +
             'where uc_c_id = $cid ' +
@@ -115,19 +115,19 @@ async function updateContainers(req, res) {
                 $type: req.body.type
             });
 
-        res.sendStatus(200);
+        return res.sendStatus(200);
 
     } catch (e) {
         console.log(e);
         return res.sendStatus(500);
     }
 }
-exports.updateContainers = updateContainers;
+exports.updateContainer = updateContainer;
 
-async function deleteContainers(req, res) {
+async function deleteContainer(req, res) {
     try {
 
-        let containerId= await db.get(
+        let containerId = await db.get(
             'select uc_c_id ' +
             'from user_container ' +
             'where uc_c_id = $cid ' +
@@ -142,11 +142,73 @@ async function deleteContainers(req, res) {
             'where c_id = $id'
             ,{ $id: req.params.id });
 
-        res.sendStatus(200);
+        return res.sendStatus(200);
 
     } catch (e) {
         console.log(e);
-        return res.sendStatus(404);
+        return res.sendStatus(500);
     }
 }
-exports.deleteContainers = deleteContainers;
+exports.deleteContainer = deleteContainer;
+
+async function addUserToContainer(req, res) {
+    try {
+
+        let containerId = await db.get(
+            'select uc_c_id ' +
+            'from user_container ' +
+            'where uc_c_id = $cid ' +
+            'and uc_user_id = $uid '
+            ,{ $cid: req.params.id, $uid: req.user.id }
+        );
+        if (!containerId) return res.status(400).send ("User doesn't own container");
+
+        let newUser = await db.get(
+            'select u_id as id ' +
+            'from user ' +
+            'where u_username = $username'
+            ,{ $username: req.body.username }
+        );
+
+        if(!newUser) return res.status(404).send ("User does not exist");
+
+        await db.run('INSERT INTO user_container (uc_c_id, uc_user_id) VALUES ($container, $user)',
+            { $container: req.params.id, $user: newUser.id});
+
+        return res.sendStatus(200);
+
+    } catch (e) {
+        console.log(e);
+        return res.sendStatus(500);
+    }
+}
+exports.addUserToContainer = addUserToContainer;
+
+async function listUsers(req, res) {
+    try {
+
+        let containerId = await db.get(
+            'select uc_c_id ' +
+            'from user_container ' +
+            'where uc_c_id = $cid ' +
+            'and uc_user_id = $uid '
+            ,{ $cid: req.params.id, $uid: req.user.id }
+        );
+        if (!containerId) return res.status(400).send ("User doesn't own container");
+
+        let users = await db.all(
+            'select u_id as id, u_username as username ' +
+            'from user_container, user ' +
+            'where uc_c_id = $id ' +
+            'and uc_user_id = u_id'
+            ,{ $id: req.params.id }
+        );
+
+        return res.send(users);
+
+    } catch (e) {
+        console.log(e);
+        return res.sendStatus(500);
+    }
+}
+exports.listUsers = listUsers;
