@@ -38,7 +38,7 @@ exports.run = run;
 // --- User ---
 async function getUserLogin(username) {
     return get(
-        'Select u_username as username, u_password as hash from user where username = $username',
+        'Select u_username as username, u_password as hash from users where username = $username',
         { $username: username}
     );
 }
@@ -46,7 +46,7 @@ exports.getUserLogin = getUserLogin;
 
 async function isUsernameTaken(username) {
     let user = await get(
-        'Select * from user where u_username = $username',
+        'Select * from users where u_username = $username',
         { $username: username}
     );
     return !(!user);
@@ -55,7 +55,7 @@ exports.isUsernameTaken = isUsernameTaken;
 
 async function getCurrentUser(userID) {
     return get(
-        'select u_username as username, u_name as name, u_email as email, u_type as type from user where u_id = $id',
+        'select u_username as username, u_name as name, u_email as email, u_type as type from users where u_id = $id',
         { $id: userID}
     );
 }
@@ -63,7 +63,7 @@ exports.getCurrentUser = getCurrentUser;
 
 async function createUser(username, password, email, name, type) {
     return run(
-        'Insert into user(u_username, u_password, u_email, u_name, u_type) values($username, $password, $email, $name, $type)',
+        'Insert into users(u_username, u_password, u_email, u_name, u_type) values($username, $password, $email, $name, $type)',
         {
             $username: username,
             $password: password,

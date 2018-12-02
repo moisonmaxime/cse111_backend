@@ -4,7 +4,7 @@ async function listContainers(req, res) {
     try {
 
         let containers = await db.all('SELECT c_id as id, c_name as name, c_type as type ' +
-            'FROM container, user_container, user ' +
+            'FROM container, user_container, users ' +
             'where uc_user_id = u_id ' +
             'and uc_c_id = c_id ' +
             'and u_id = $id',
@@ -165,7 +165,7 @@ async function addUserToContainer(req, res) {
 
         let newUser = await db.get(
             'select u_id as id ' +
-            'from user ' +
+            'from users ' +
             'where u_username = $username'
             ,{ $username: req.body.username }
         );
@@ -198,7 +198,7 @@ async function listUsers(req, res) {
 
         let users = await db.all(
             'select u_id as id, u_username as username ' +
-            'from user_container, user ' +
+            'from user_container, users ' +
             'where uc_c_id = $id ' +
             'and uc_user_id = u_id'
             ,{ $id: req.params.id }

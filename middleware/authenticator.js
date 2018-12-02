@@ -9,7 +9,7 @@ function identify() {
             if (!token) throw Error("User did not provide token");
             let username = verifyJWT(token);
             if (!username) throw Error("Could not find matching token");
-            let foundUser = await db.get('Select u_id as id, u_type as type, u_username as username from user where u_username = $username', { $username: username });
+            let foundUser = await db.get('Select u_id as id, u_type as type, u_username as username from users where u_username = $username', { $username: username });
             if (!foundUser) throw Error("User does not exist");
             req.user = foundUser;
             next();

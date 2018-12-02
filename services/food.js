@@ -4,7 +4,7 @@ let db = require('../db_manager')
 //     try {
 //
 //         let food = await db.get('SELECT f_name, Cast ((JulianDay(f_expiredate)-JulianDay(\'now\')) As Integer)as daysToEat    ' +
-//             'FROM container, user_container, user, food   ' +
+//             'FROM container, user_container, users, food   ' +
 //             'where uc_user_id = u_id    ' +
 //             'and uc_c_id = c_id   ' +
 //             'and f_container_id = c_id ' +

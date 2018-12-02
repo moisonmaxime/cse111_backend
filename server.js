@@ -32,12 +32,6 @@ food(app);
 let drink = require('./endpoints/drink');
 drink(app);
 
-let tag = require('./endpoints/tag');
-tag(app);
-
-let audience = require('./endpoints/audience');
-audience(app);
-
 app.listen(port, () => {
     console.log('REST API server started on: ' + port);
 });
