@@ -1,4 +1,4 @@
-CREATE TABLE food (
+CREATE TABLE item (
     f_id INTEGER PRIMARY KEY AUTOINCREMENT,
     f_name         CHAR (25)    NOT NULL,
     f_brand        CHAR (25),

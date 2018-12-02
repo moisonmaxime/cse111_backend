@@ -35,20 +35,11 @@ async function getContents(req, res) {
 
         if (!containerInfo) return res.sendStatus(404);
 
-        let foods = await db.all(
+        let items = await db.all(
             'SELECT f_id as id, f_name as name, f_brand as brand, ' +
             'f_expiredate as expiration, f_calories as calories, f_quantity as quantity ' +
-            'FROM food ' +
+            'FROM item ' +
             'WHERE f_container_id = $id',
-            {
-                $id: req.params.id
-            });
-
-        let drinks = await db.all(
-            'SELECT d_id as id, d_name as name, d_brand as brand, ' +
-            'd_expiredate as expiration, d_calories as calories, d_quantity as quantity ' +
-            'FROM drink ' +
-            'WHERE d_container_id = $id',
             {
                 $id: req.params.id
             });
@@ -57,8 +48,7 @@ async function getContents(req, res) {
             id: containerInfo.id,
             name: containerInfo.name,
             type: containerInfo.type,
-            foods: foods,
-            drinks: drinks
+            items: items
         });
 
     } catch (e) {
