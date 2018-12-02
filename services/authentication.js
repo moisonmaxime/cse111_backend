@@ -1,5 +1,5 @@
-const db = require('../database/db_manager'),
-    { hashPassword, checkPassword, signJWT } = require('../auth');
+const db = require('../database/queries'),
+    { hashPassword, checkPassword, signJWT } = require('../auth/auth');
 
 async function login(req, res) {
     try {

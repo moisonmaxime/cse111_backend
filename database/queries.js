@@ -1,22 +1,12 @@
-const { Pool } = require('pg');
-const { databaseURL } = require('../auth');
-
-const pool = new Pool({
-    connectionString: databaseURL,
-    ssl: true
-});
-
-const client = pool.connect();
+const { client } = require('./connection');
 
 async function run(query, values) {
     return (await (await client).query(query, values)).rows;
 }
-exports.run = run;
 
 async function get(query, values) {
     return (await run(query, values))[0];
 }
-exports.get = get;
 
 // --- User ---
 async function getUserLogin(username) {

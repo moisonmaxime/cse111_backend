@@ -1,11 +1,8 @@
 const bcrypt = require('bcrypt'),
     jwt = require('jsonwebtoken'),
-    fs = require('fs');
+    { secretKey } = require('./secrets');
 
-const secretKey = process.env.SECRET || fs.readFileSync('./key.pem');
 const jwtExpirationTime = 86400*365; // 365 days in seconds
-
-exports.databaseURL = process.env.DATABASE_URL || require('./database.secrets') || "";
 
 function hashPassword(password) {
     return bcrypt.hash(password, 8);

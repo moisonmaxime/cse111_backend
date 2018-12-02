@@ -1,4 +1,4 @@
-let db = require('../database/db_manager')
+let db = require('../database/queries')
 
 // async function getFood(req, res) {
 //     try {

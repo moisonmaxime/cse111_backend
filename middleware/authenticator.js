@@ -1,5 +1,5 @@
-const { verifyJWT } = require('../auth');
-const db = require('../database/db_manager');
+const { verifyJWT } = require('../auth/auth');
+const db = require('../database/queries');
 
 
 function identify() {
