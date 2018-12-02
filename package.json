@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon $NODE_DEBUG_OPTION server.js",
+    "strat-heroku": "node server.js",
     "migrate": "./database/migrate.sh"
   },
   "dependencies": {
