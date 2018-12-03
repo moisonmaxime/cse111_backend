@@ -3,7 +3,7 @@ let express = require('express'),
     port = process.env.PORT || 3000;
 
 app.use(express.json());
-
+app.use(express.urlencoded({extended: true}))
 
 // --- Middleware ---
 let { identify } = require('./middleware/authenticator');
@@ -26,8 +26,8 @@ users(app);
 let containers = require('./endpoints/containers');
 containers(app);
 
-let food = require('./endpoints/item');
-food(app);
+let item = require('./endpoints/item');
+item(app);
 
 app.listen(port, () => {
     console.log('REST API server started on: ' + port);
