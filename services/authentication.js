@@ -8,11 +8,11 @@ async function login(req, res) {
 
         let response = await db.getUserLogin(username);
 
-        if (!response) return res.status(400).send("Invalid credentials");
+        if (!response) return res.status(403).send("Invalid credentials");
 
         let match = checkPassword(password, response.hash);
 
-        if (!match) return res.status(400).send("Invalid credentials");
+        if (!match) return res.status(403).send("Invalid credentials");
 
         return res.json({ token: signJWT(response.username) });
 
