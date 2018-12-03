@@ -61,6 +61,15 @@ async function findUserID(username) {
 }
 exports.findUserID = findUserID;
 
+async function searchUser(username) {
+    return get(
+        'select u_username as username ' +
+        'from users ' +
+        'where u_username like \'$1\'%',
+        [username]
+    );
+}
+exports.searchUser = searchUser;
 
 // --- Container ---
 
