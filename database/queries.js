@@ -186,9 +186,9 @@ async function userOwnsItem(userID, itemID) {
     let item = await get(
         'select f_id ' +
         'from item, user_container ' +
-        'where uc_c_id = f_container_id ' +
-        'and uc_user_id = $1 ' +
-        'and f_id = $2',
+        'where f_id = $1 ' +
+        'and uc_c_id = f_container_id ' +
+        'and uc_user_id = $2',
         [itemID, userID]);
     return Boolean(item);
 }
